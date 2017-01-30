@@ -8,7 +8,10 @@ for Sublime Text 3. Currently it is optimized to program on Pawn,
 ___
 ## Descriptions & Installation
 
-See its main post at the AlliedModders' Forum: [Versioned Sublime Text Settings](https://forums.alliedmods.net/showthread.php?p=2454292#post2454292)
+See its main post at the AlliedModders' Forum: 
+
+1. [[TUT] How to setup a simple IDE to program/compile AMXX plugins (with Sublime Text)
+](https://forums.alliedmods.net/showthread.php?t=293376)
 
 
 
