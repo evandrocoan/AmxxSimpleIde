@@ -1,9 +1,15 @@
-# Sublime Text Studio
+# Sublime Text Minimal Installation
 
-An incredible set of settings/packages/shortcuts for Sublime Text 3. Currently it is optimized
-to program on:
+An a simple IDE to program/compile AMXX plugins (with Sublime Text) set of settings/packages/shortcuts
+for Sublime Text 3. Currently it is optimized to program on Pawn,
 
-1. Pawn
+
+
+___
+## Descriptions & Installation
+
+See its main post at the AlliedModders' Forum: [Versioned Sublime Text Settings](https://forums.alliedmods.net/showthread.php?p=2454292#post2454292)
+
 
 
 ___
