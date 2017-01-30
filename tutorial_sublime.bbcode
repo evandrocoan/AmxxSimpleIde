@@ -1,0 +1,230 @@
+[anchor]Top[/anchor][B][SIZE="4"][TUT] How to setup a simple IDE to program/compile AMXX plugins (with Sublime Text)[/SIZE][/B]
+
+[QUOTE=Depresie;2488992]
+You should really consider making this simple IDE for PC since all we got now is the old bugged AMXX studio and other buggy / over developed IDEs full of crap when all there is needed is
+[QUOTE]
+Open
+Save
+Compiler
+Highlighting
+Light + Dark skin
+Output + Compiler path
+Search + Replace
+[/QUOTE]
+[/QUOTE]
+
+
+[SIZE="6"][COLOR="blue"][B]Contents' Table[/B][/COLOR][/SIZE]
+
+[LIST=1]
+[*][goanchor=Install]How to install?[/goanchor]
+[*][goanchor=Compile]How to compile?[/goanchor]
+[*][goanchor=What]What more you can do?[/goanchor]
+[*][goanchor=LatestRelease][B]Downloads[/B][/goanchor]
+[/LIST]
+
+
+[B]Why Sublime Text?[/B]
+
+Because you can customize anything: Key Bindings, Menus, Snippets, Macros, Completions and more, just about everything in Sublime Text is customizable.
+
+
+[B]What do you need?[/B]
+
+[B]
+[LIST=1]
+[*]On these links bellow you can download the good Sublime Text 3 Build 3114 for windows/linux 32 bits (x86):
+
+
+[LIST=0]
+[*][URL="https://download.sublimetext.com/Sublime%20Text%20Build%203114.zip"] https://download.sublimetext.com/Sublime Text Build 3114.zip (Windows)[/URL]
+[*][URL="https://download.sublimetext.com/sublime-text_build-3114_i386.deb"] https://download.sublimetext.com/sublime-text_build-3114_i386.deb (Linux)[/URL]
+[*][URL="https://download.sublimetext.com/sublime_text_3_build_3114_x32.tar.bz2"] https://download.sublimetext.com/sublime_text_3_build_3114_x32.tar.bz2 (Linux)[/URL]
+[/LIST]
+
+
+[*]The [URL="https://forums.alliedmods.net/attachment.php?attachmentid=160438&stc=1&d=1485802802"]configuration files[/URL] (Packages.zip) I created and attached on the `.zip` file at the end of this post.
+[/LIST]
+
+
+[anchor]Install[/anchor][SIZE="5"][B]How to install?[/B][/SIZE] [goanchor=Top]Go to top[/goanchor]
+
+[LIST=1]
+[*][B]Unzip the Sublime Text were you like most:[/B]
+
+
+[LIST=1]
+[*][img]http://i.imgur.com/064sgBy.png[/img]
+
+
+[*][img]http://i.imgur.com/APdW73M.png[/img]
+[/LIST]
+
+
+[*][B]Unzip the configurations files on the folder `Data` inside the Sublime Text folder:[/B]
+
+
+[LIST=1]
+[*][img]http://i.imgur.com/VWdgknh.png[/img]
+
+
+[*][img]http://i.imgur.com/1J1tMQQ.png[/img]
+[/LIST]
+
+
+[*][B]Open the Sublime Text and click in `Cancel`, when it ask you to update:[/B]
+
+
+[LIST=1]
+[*][img]http://i.imgur.com/DJm0AR0.png[/img]
+
+
+[*][img]http://i.imgur.com/2tu3NFN.png[/img]
+
+
+[*][img]http://i.imgur.com/PERp3uC.png[/img]
+[/LIST]
+
+
+[*][B]Click in `Amx Mod X -> Configure Windows/Batch Compiler` and put the path to your game plugins folder and the compiler around the line 31 and 41:[/B]
+
+
+[LIST=1]
+[*][img]http://i.imgur.com/GhiQb0v.png[/img]
+
+
+[*][img]http://i.imgur.com/OQdjonZ.png[/img]
+
+
+[*][B]For example if you only want output the compiled `.amxx` file to one game mod, you can set the file like this:[/B]
+
+
+[img]http://i.imgur.com/nuvX6tb.png[/img]
+
+
+[*][B]Instead of this:[/B]
+
+
+[img]http://i.imgur.com/HDiKCok.png[/img]
+[/LIST]
+[/B]
+
+[/LIST]
+
+
+
+[anchor]Compile[/anchor][B][SIZE="5"]How to compile?[/SIZE][/B] [goanchor=Top]Go to top[/goanchor]
+
+[LIST=1]
+[*][B]For the first time, click on the menu `Tools -> Build With...` and choose the `AmxxPawn - Build AMXX Plugin (Windows/Bat)`[/B]
+[*]For the second time, and others, click on the menu `Tools -> Build`.
+
+
+[LIST=1]
+[*][img]http://i.imgur.com/kkvJjhg.png[/img]
+
+
+
+[*][img]http://i.imgur.com/V31lYRQ.png[/img]
+
+
+
+[B]As you may notice, those things at the menu's are the keyboard shortcuts:[/B]
+
+
+[img]http://i.imgur.com/1ewIZpV.png[/img]
+
+
+[*][/LIST]
+[B]So, next time you want to do that command just to press `F7` or `Ctrl+Shift+B`.[/B]
+[LIST=1]
+[*]To close the output build, just press the escape key `Esc`.
+[*]To open the build output again, just press `F8`.
+
+
+[img]http://i.imgur.com/Jcl1Hg9.png[/img]
+[/LIST]
+
+
+[/LIST]
+
+
+[B]The Windows Compiler[/B]
+
+[code]
+Compiling show_server_info... Current time is: 14:12:18,12 - 30/01/2017
+
+Welcome to the AMX Mod X 1.8.1-300 Compiler.
+Copyright (c) 1997-2013 ITB CompuPhase, AMX Mod X Team
+
+Header size:            320 bytes
+Code size:             1324 bytes
+Data size:             1192 bytes
+Stack/heap size:      16384 bytes; estimated max. usage=201 cells (804 bytes)
+Total requirements:   19220 bytes
+Done.
+
+1 File(s) copied, to the folder F:\SteamCMD\steamapps\common\Half-Life\cstrike\addons\amxmodx\plugins
+1 File(s) copied, to the folder F:\SteamCMD\steamapps\common\Half-Life\czero\addons\amxmodx\plugins
+1 File(s) copied, to the folder F:\SteamLibrary\steamapps\common\Sven Co-op Dedicated Server\svencoop\addons\amxmodx\plugins
+
+Took 0:00:00,38 seconds to run this script.
+[/code]
+
+
+[B]The Linux Compiler[/B]
+
+[code]
+Compiling show_server_info... Current time is: Mon, Jan 30, 2017  2:27:52 PM
+
+Welcome to the AMX Mod X 1.8.1-300 Compiler.
+Copyright (c) 1997-2013 ITB CompuPhase, AMX Mod X Team
+
+Header size:            320 bytes
+Code size:             1324 bytes
+Data size:             1192 bytes
+Stack/heap size:      16384 bytes; estimated max. usage=201 cells (804 bytes)
+Total requirements:   19220 bytes
+Done.
+
+Installing the plugin to the folder: F:/SteamCMD/steamapps/common/Half-Life/czero/addons/amxmodx/plugins
+Installing the plugin to the folder: F:/SteamCMD/steamapps/common/Half-Life/cstrike/addons/amxmodx/plugins
+Installing the plugin to the folder: F:/SteamLibrary/steamapps/common/Sven Co-op Dedicated Server/svencoop/addons/amxmodx/plugins
+
+Took '1.27' seconds to run the script 'D/User/Dropbox/Applications/SoftwareVersioning/SublimeText/Data/Packages/Amxx Pawn/AmxxPawn.sh'.
+[/code]
+
+
+
+[anchor]What[/anchor][SIZE="5"][B]What more you can do?[/B][/SIZE] [goanchor=Top]Go to top[/goanchor]
+
+[LIST=1]
+[*][B]If you think the font size is too big, click on `Preferences -> Font -> Smaller`[/B]
+
+
+[img]http://i.imgur.com/k4YnyAi.png[/img]
+
+
+
+[*][B]If you think there are too much menus entries, you can delete more.[/B]
+Go to `Preferences -> Browse Packages...` open the folder `Default` and the file `Main.sublime-menus` and remove the menus you do not want to.
+
+
+[LIST=1]
+[*][img]http://i.imgur.com/JhN7MRc.png[/img]
+
+
+[*][img]http://i.imgur.com/5RemUx7.png[/img]
+
+
+[*][img]http://i.imgur.com/7QhSQwS.png[/img]
+
+
+[*][img]http://i.imgur.com/YH9TrMa.png[/img]
+[/LIST]
+
+
+[/LIST]
+
+[anchor]LatestRelease[/anchor] [goanchor=Top]Go to top[/goanchor]
+
