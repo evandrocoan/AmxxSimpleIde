@@ -1,0 +1,43 @@
+{
+	"auto_upgrade_ignore":
+	[
+		"amxmodx",
+		"Amxx Pawn",
+		"ANSIescape",
+		"BBCode",
+		"Boxy Theme",
+		"BufferScroll",
+		"Notepad++ Theme",
+		"Package Control",
+		"Preferences Editor",
+		"Side-by-Side Settings",
+		"SideBarEnhancements",
+		"SublimeCodeIntel",
+		"SublimeREPL",
+		"SyncedSideBar",
+		"Theme - Soda",
+		"Theme - SoDaReloaded",
+		"Toolbar",
+		"Markdown to BB Code Converter",
+		"Clear Cursors-Carets",
+		"Clipboard Scope Copy",
+		"Default Syntax",
+		"Fix Project Switch-Restart Bug",
+		"Fixed Selections Clear",
+		"Force Rewrite Sublime Settings",
+		"Select All Spelling Errors",
+		"Configuration Files Syntax",
+		"SQL Keyword Uppercase",
+		"View Settings Freely"
+	],
+	"bootstrapped": true,
+	"debug": false,
+	"in_process_packages":
+	[
+	],
+	"installed_packages":
+	[
+		"Column Select",
+		"Package Control"
+	]
+}

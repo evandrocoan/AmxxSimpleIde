@@ -1,0 +1,14 @@
+[
+    { "keys": ["ctrl+="]           , "command": "power_cursor_add" },
+    { "keys": ["ctrl++"]           , "command": "power_cursor_add" },
+    { "keys": ["ctrl+keypad_plus"] , "command": "power_cursor_add" },
+
+    { "keys": ["ctrl+-"]           , "command": "power_cursor_remove", "context": [ { "key": "in_cursor_transition" } ] },
+    { "keys": ["ctrl+keypad_minus"], "command": "power_cursor_remove", "context": [ { "key": "in_cursor_transition" } ] },
+
+    { "keys": ["ctrl+["] , "command": "power_cursor_select"  , "args": { "forward": false } },
+    { "keys": ["ctrl+]"] , "command": "power_cursor_select"  , "args": { "forward": true } },
+
+    { "keys": ["ctrl+a"] , "command": "power_cursor_activate", "context": [ { "key": "in_cursor_transition" } ] },
+    { "keys": ["escape"], "command": "power_cursor_exit"    , "context": [ { "key": "in_cursor_transition" } ] },
+]

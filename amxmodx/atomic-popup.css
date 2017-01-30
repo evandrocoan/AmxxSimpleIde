@@ -1,0 +1,26 @@
+html {
+	background-color: #334;
+	margin: -5px;
+	font-family: verdana;
+	font-size: 11px;
+}
+.top {
+	background-color: #2A2A33;
+	padding: 5px 10px 7px 10px;
+	border-top-right-radius: 10px;
+	border-top-left-radius: 10px;
+}
+
+.bottom {
+	background-color: #262633;
+	margin-top: 5px;
+	padding: 5px 10px 5px 10px;	
+}
+
+.file { color: #ccc; font-weight: bold;}
+.func_type { color: #5FA813; }
+.func_name { color: #C97016; font-weight: bold;}
+.params { color: #5FA813; }
+.params_definition { color: #6B859E; }
+.return { color: #5FA813; }
+.return_type { color: #6B859E; }
