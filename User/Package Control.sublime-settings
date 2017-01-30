@@ -38,6 +38,7 @@
 	"installed_packages":
 	[
 		"Column Select",
+		"MoveText",
 		"Package Control"
 	]
 }
