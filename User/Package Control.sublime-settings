@@ -28,7 +28,9 @@
 		"Select All Spelling Errors",
 		"Configuration Files Syntax",
 		"SQL Keyword Uppercase",
-		"View Settings Freely"
+		"View Settings Freely",
+		"Column Select",
+		"MoveText"
 	],
 	"bootstrapped": true,
 	"debug": false,
@@ -37,8 +39,6 @@
 	],
 	"installed_packages":
 	[
-		"Column Select",
-		"MoveText",
 		"Package Control"
 	]
 }
