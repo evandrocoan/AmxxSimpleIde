@@ -1,6 +1,6 @@
 {
 	"author": "OvidiuS, on the thread/post Sublime Text 2, https://forums.alliedmods.net/showpost.php?p=2128068&postcount=5",
-	"scope": "source.AmxxPawn",
+	"scope": "source.AmxxPawn, source.sma",
 
 	"completions": 
 	[

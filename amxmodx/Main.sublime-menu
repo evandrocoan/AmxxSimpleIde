@@ -15,6 +15,11 @@
             { "caption": "-" },
             {
                 "command": "open_file",
+                "args": {"file": "${packages}/Amxx Pawn/AmxxPawn.sublime-build"},
+                "caption": "Configure Sublime Text Builder"
+            },
+            {
+                "command": "open_file",
                 "args": {"file": "${packages}/Amxx Pawn/AmxxPawn.sh"},
                 "caption": "Configure Linux/Cygwin Compiler"
             },
@@ -26,11 +31,16 @@
             { "caption": "-" },
             {
                 "command": "open_file",
-                "args": {"file": "${packages}/Amxx Pawn/AmxxPawn.sublime-build"},
-                "caption": "Configure Sublime Text Builder"
+                "args": { "file": "${packages}/amxmodx/AMXX-Console.sublime-settings" },
+                "caption": "Edit AMXX-Console Settings"
+            },
+            {
+                "command": "open_file",
+                "args": { "file": "${packages}/amxmodx/amxx.sublime-settings" },
+                "caption": "Edit AMXX-Autocompletion Settings"
             },
         ]
-    }
+    },
 ]
 
 

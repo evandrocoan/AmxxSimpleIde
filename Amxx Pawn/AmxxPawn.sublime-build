@@ -1,6 +1,6 @@
 {
     "working_dir": "$file_path",
-    "selector": "source.AmxxPawn, source.AMXX",
+    "selector": "source.AmxxPawn, source.AMXX, source.sma",
 
     "file_regex": "^.*[\\/\\\\]+(.+)\\(([0-9]+ ?.*)\\) : (.*)",
     "cmd": ["sh","$packages/Amxx Pawn/AmxxPawn.sh","$file", "$file_base_name", "$packages"],
@@ -15,7 +15,9 @@
             "name": "Build AMXX Plugin (Windows/Bat)",
             "cmd": ["$packages/Amxx Pawn/AmxxPawn.bat","$file", "$file_base_name", "$packages"],
         },
-    ]
+    ],
+
+    "syntax": "Packages/amxmodx/AMXX-Console.sublime-syntax",
 
     // "target": "ansi_color_build",
     // "syntax": "Packages/ANSIescape/ANSI.tmLanguage"

@@ -421,18 +421,7 @@ def on_settings_modified() :
 		os.mkdir(packages_path)
 
 	# fix-path
-	fix_path(settings, 'amxxpc_directory')
 	fix_path(settings, 'include_directory')
-	fix_path(settings, 'output_directory')
-
-	# build-system
-	build_filename = 'AMXX-Compiler.sublime-build'
-	build = sublime.load_settings(build_filename)
-	build.set('cmd', [ settings.get('amxxpc_directory'), "-d"+str(settings.get('amxxpc_debug')), "-i"+settings.get('include_directory'), "-o"+settings.get('output_directory')+"/${file_base_name}.amxx", "${file}" ])
-	build.set('syntax', 'AMXX-Console.sublime-syntax')
-	build.set('selector', 'source.sma')
-	build.set('working_dir', '${file_path}')
-	sublime.save_settings(build_filename)
 
 	# Get the set color scheme
 	color_scheme = settings.get('color_scheme')
@@ -455,7 +444,7 @@ def on_settings_modified() :
 	g_color_schemes['list'] = g_default_schemes[:]
 	g_color_schemes['active'] = color_scheme
 
-	for file in os.listdir(sublime.packages_path()+"/amxmodx") :
+	for file in os.listdir(sublime.packages_path()+"/") :
 	#{
 		if file.endswith("-pawn.tmTheme") :
 			g_color_schemes['list'] += [ file.replace("-pawn.tmTheme", "") ]
@@ -469,20 +458,12 @@ def on_settings_modified() :
 
 def is_invalid_settings(settings) :
 #{
-	if settings.get('amxxpc_directory') is None or settings.get('amxxpc_debug') is None or settings.get('include_directory') is None or settings.get('output_directory') is None or settings.get('color_scheme') is None :
+	if settings.get('include_directory') is None or settings.get('color_scheme') is None :
 		return "You are not set correctly settings for AMXX-Editor.\n\nNo has configurado correctamente el AMXX-Editor."
-
-	temp = settings.get('amxxpc_directory')
-	if not os.path.isfile(temp) :
-		return "amxxpc_directory :  File not exist. \n\"%s\"" % temp
 
 	temp = settings.get('include_directory')
 	if not os.path.isdir(temp) :
 		return "include_directory :  Directory not exist. \n\"%s\"" % temp
-
-	temp = settings.get('output_directory')
-	if temp is "${file_path}" and not os.path.isdir(temp) :
-		return "output_directory :  Directory not exist. \n\"%s\"" % temp
 
 	return None
 #}
