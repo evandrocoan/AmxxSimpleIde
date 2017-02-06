@@ -22,6 +22,7 @@ def plugin_loaded() :
 #{
 	settings = sublime.load_settings("amxx.sublime-settings")
 
+	on_settings_modified( True );
 	settings.add_on_change('amxx', on_settings_modified)
 	sublime.set_timeout_async(check_update, 2500)
 #}
@@ -187,7 +188,7 @@ class AMXXEditor(sublime_plugin.EventListener):
 
 		view.run_command("amxx_build_ver")
 
-	def on_selection_modified(self, view) :
+	def on_selection_modified_async(self, view) :
 		if not self.is_amxmodx_file(view) or not g_enable_inteltip :
 			return
 
@@ -315,7 +316,7 @@ class AMXXEditor(sublime_plugin.EventListener):
 		else :
 			webbrowser.open_new_tab("http://www.amxmodx.org/api/"+file+"/"+search)
 
-	def on_activated(self, view) :
+	def on_activated_async(self, view) :
 		if not self.is_amxmodx_file(view):
 			return
 		if not view.file_name() :
@@ -323,13 +324,13 @@ class AMXXEditor(sublime_plugin.EventListener):
 		if not view.file_name() in nodes :
 			add_to_queue(view)
 
-	def on_modified(self, view) :
+	def on_modified_async(self, view) :
 		self.add_to_queue_delayed(view)
 
-	def on_post_save(self, view) :
+	def on_post_save_async(self, view) :
 		self.add_to_queue_now(view)
 
-	def on_load(self, view) :
+	def on_load_async(self, view) :
 		self.add_to_queue_now(view)
 
 	def add_to_queue_now(self, view) :
@@ -389,7 +390,7 @@ class AMXXEditor(sublime_plugin.EventListener):
 		doctset.update(node.doct)
 
 
-def on_settings_modified() :
+def on_settings_modified(is_loading=False):
 #{
 	print_debug( 1, "on_settings_modified" )
 	global g_enable_inteltip
@@ -467,7 +468,7 @@ def is_invalid_settings(settings) :
 
 	temp = settings.get('include_directory')
 	if not os.path.isdir(temp) :
-		return "include_directory :  Directory not exist. \n\"%s\"" % temp
+		return "The `include_directory` directory not exist!\n\n\"%s\"\n\nPlease, go to the menu:\n`Amx Mod X -> Configure AMXX-Autocompletion Settings`" % temp
 
 	return None
 #}
