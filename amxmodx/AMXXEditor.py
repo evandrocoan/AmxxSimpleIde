@@ -398,22 +398,12 @@ def on_settings_modified(is_loading=False):
 	settings = sublime.load_settings("amxx.sublime-settings")
 	invalid  = is_invalid_settings(settings)
 
-	if invalid :
+	if invalid:
 	#{
+		if not is_loading:
+			sublime.message_dialog("AMXX-Editor:\n\n" + invalid)
+
 		g_enable_inteltip = 0
-
-		sublime.message_dialog("AMXX-Editor:\n\n" + invalid)
-
-		file_name = sublime.packages_path() + "/User/amxx.sublime-settings"
-
-		if not os.path.isfile(file_name):
-			default = sublime.load_resource("Packages/amxmodx/amxx.sublime-settings")
-			default = default.replace("Example:", "User Setting:")
-			f = open(file_name, "w")
-			f.write(default)
-			f.close()
-
-		sublime.active_window().run_command("edit_settings", {"base_file": "${packages}/amxmodx/amxx.sublime-settings", "default": "{\n\t$0\n}\n"})
 		return
 	#}
 
