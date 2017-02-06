@@ -391,6 +391,7 @@ class AMXXEditor(sublime_plugin.EventListener):
 
 def on_settings_modified() :
 #{
+	print_debug( 1, "on_settings_modified" )
 	global g_enable_inteltip
 
 	settings = sublime.load_settings("amxx.sublime-settings")
@@ -438,6 +439,9 @@ def on_settings_modified() :
 	g_debug_level 			= settings.get('debug_level', 0)
 	g_delay_time			= settings.get('live_refresh_delay', 1.0)
 	g_include_dir 			= settings.get('include_directory')
+
+	print_debug( 1, "( on_settings_modified ) g_debug_level: %d" % g_debug_level )
+	print_debug( 1, "( on_settings_modified ) g_include_dir: " + g_include_dir )
 
 	# generate list of color schemes
 	global g_color_schemes, g_default_schemes
@@ -598,6 +602,9 @@ class ProcessQueueThread(watchdog.utils.DaemonThread) :
 
 
 def get_file_name(view_file_name, base_file_name) :
+
+	print_debug( 1, "get_file_name: " + g_include_dir )
+
 	if local_re.search(base_file_name) == None:
 		file_name = os.path.join(g_include_dir, base_file_name + '.inc')
 	else:

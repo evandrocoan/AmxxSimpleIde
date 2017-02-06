@@ -1,6 +1,6 @@
 {
     // Path to includes folder, the files here will be used for auto-completion.
-    "include_directory": "F:\\SteamCMD\\steamapps\\common\\Half-Life\\cstrike\\addons\\amxmodx\\scripting\\include",
+    "include_directory": "F:\\SteamCMD\\steamapps\\common\\Half-Life\\czero\\addons\\amxmodx\\scripting\\include",
 
     // ( true / false ) Enable IntelTip PopUp
     "enable_inteltip": false,

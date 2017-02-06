@@ -3,17 +3,17 @@
     "selector": "source.AmxxPawn, source.AMXX, source.sma",
 
     "file_regex": "^.*[\\/\\\\]+(.+)\\(([0-9]+ ?.*)\\) : (.*)",
-    "cmd": ["sh","$packages/Amxx Pawn/AmxxPawn.sh","$file", "$file_base_name", "$packages"],
+    "cmd": ["sh","$packages/Amxx Pawn/AmxxPawn.sh","$file", "$file_base_name", "$packages", "$file_path"],
 
     "variants":
     [
         {
             "name": "Build AMXX Plugin (Linux/Cygwin)",
-            "cmd": ["sh","$packages/Amxx Pawn/AmxxPawn.sh","$file", "$file_base_name", "$packages"],
+            "cmd": ["sh","$packages/Amxx Pawn/AmxxPawn.sh","$file", "$file_base_name", "$packages", "$file_path"],
         },
         {
             "name": "Build AMXX Plugin (Windows/Bat)",
-            "cmd": ["$packages/Amxx Pawn/AmxxPawn.bat","$file", "$file_base_name", "$packages"],
+            "cmd": ["$packages/Amxx Pawn/AmxxPawn.bat","$file", "$file_base_name", "$packages", "$file_path"],
         },
     ],
 
