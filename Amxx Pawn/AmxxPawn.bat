@@ -64,6 +64,10 @@ rem
 rem Example: %1="F:\SteamCMD\steamapps\common\Half-Life\czero\addons\my_plugin.sma"
 set PLUGIN_SOURCE_CODE_FILE_PATH="%1"
 
+rem %4 is the path of the folder where the plugin source code is.
+rem Example F:\SteamCMD\steamapps\common\Half-Life\czero\addons\
+set PLUGIN_SOURCE_CODE_FOLDER_INCLUDE=%4\include/
+
 
 
 rem Example: $2="my_plugin"
@@ -75,7 +79,7 @@ rem So, this way there is not way you are going to use the wrong version of the 
 IF EXIST "%PLUGIN_BINARY_FILE_PATH%" del "%PLUGIN_BINARY_FILE_PATH%"
 
 rem To call the compiler to compile the plugin to the output folder $PLUGIN_BINARY_FILE_PATH
-"%AMXX_COMPILER_PATH%" -o"%PLUGIN_BINARY_FILE_PATH%" %PLUGIN_SOURCE_CODE_FILE_PATH%
+"%AMXX_COMPILER_PATH%" -i"%PLUGIN_SOURCE_CODE_FOLDER_INCLUDE%" -o"%PLUGIN_BINARY_FILE_PATH%" %PLUGIN_SOURCE_CODE_FILE_PATH%
 
 rem If there was a compilation error, there is nothing more to be done.
 IF NOT EXIST "%PLUGIN_BINARY_FILE_PATH%" GOTO end
@@ -99,7 +103,7 @@ if defined folders_list[%currentIndex%] (
     IF EXIST "!folders_list[%currentIndex%]!\%PLUGIN_BASE_FILE_NAME%.amxx" del "!folders_list[%currentIndex%]!\%PLUGIN_BASE_FILE_NAME%.amxx"
 
     rem To do the actual copying/installing.
-    for /f "delims=" %%a in ( 'xcopy /E /S /Y "%PLUGIN_BINARY_FILE_PATH%"^
+    for /f "delims=" %%a in ( 'xcopy /S /Y "%PLUGIN_BINARY_FILE_PATH%"^
             "!folders_list[%currentIndex%]!"^|find /v "%PLUGIN_BASE_FILE_NAME%"' ) do echo %%a, to the folder !folders_list[%currentIndex%]!
 
     rem Update the next 'for/array' index to copy/install.

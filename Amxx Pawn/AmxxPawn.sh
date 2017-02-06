@@ -174,6 +174,12 @@ isFloatNumber()
 # Example: $1="F:/SteamCMD/steamapps/common/Half-Life/czero/addons/my_plugin.sma"
 PLUGIN_SOURCE_CODE_FILE_PATH=$1
 
+# %4 is the path of the folder where the plugin source code is.
+# Example F:\SteamCMD\steamapps\common\Half-Life\czero\addons\
+PLUGIN_SOURCE_CODE_FOLDER_INCLUDE=$4/include/
+
+
+
 # Example: $2="my_plugin"
 PLUGIN_BASE_FILE_NAME="$2"
 PLUGIN_BINARY_FILE_PATH=${folders_list[0]}/$PLUGIN_BASE_FILE_NAME.amxx
@@ -184,14 +190,14 @@ rm "$PLUGIN_BINARY_FILE_PATH"
 printf "\n"
 
 # To call the compiler to compile the plugin to the output folder $PLUGIN_BINARY_FILE_PATH
-"$AMXX_COMPILER_PATH" -o"$PLUGIN_BINARY_FILE_PATH" "$PLUGIN_SOURCE_CODE_FILE_PATH"
+"$AMXX_COMPILER_PATH" -i"$PLUGIN_SOURCE_CODE_FOLDER_INCLUDE" -o"$PLUGIN_BINARY_FILE_PATH" "$PLUGIN_SOURCE_CODE_FILE_PATH"
 
 
 
 # If there was a compilation error, there is nothing more to be done.
 if [ -f $PLUGIN_BINARY_FILE_PATH ]
 then
-    printf "\nInstalling the plugin to the folder: ${folders_list[0]}\n"
+    printf "\nInstalling the plugin to the folder ${folders_list[0]}\n"
 
     # Remove the first element, as it was already processed and it is the source file.
     unset folders_list[0]
@@ -199,7 +205,7 @@ then
     # Now loop through the above array
     for current_output_folder in "${folders_list[@]}"
     do
-        printf "Installing the plugin to the folder: $current_output_folder\n"
+        printf "Installing the plugin to the folder $current_output_folder\n"
 
         rm "$current_output_folder/$PLUGIN_BASE_FILE_NAME.amxx"
         cp "$PLUGIN_BINARY_FILE_PATH" "$current_output_folder"
