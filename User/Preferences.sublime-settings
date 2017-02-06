@@ -23,9 +23,7 @@
 		"*.swf",
 		"*.tga",
 		"*.ttf",
-		"*.zip",
-		"MultiMod_Plugin/addons/amxmodx/scripting/galileo.sma",
-		"octave-workspace"
+		"*.zip"
 	],
 	"bold_folder_labels": true,
 	"buildview_scroll": "last",
