@@ -6,6 +6,7 @@ import string
 import sys
 import sublime, sublime_plugin
 import webbrowser
+import datetime
 import time
 import urllib.request
 from collections import defaultdict
@@ -156,7 +157,7 @@ class AMXXEditor(sublime_plugin.EventListener):
 
 		region = view.sel()[0]
 		scope = view.scope_name(region.begin())
-		print_debug(1, "(inteltip) scope_name: [%s]" % scope)
+		print_debug(4, "(inteltip) scope_name: [%s]" % scope)
 
 		if not "support.function" in scope and not "include_path.pawn" in scope or region.size() > 1 :
 			view.hide_popup()
@@ -169,13 +170,20 @@ class AMXXEditor(sublime_plugin.EventListener):
 			self.inteltip_function(view, region)
 
 	def inteltip_include(self, view, region) :
-		location 	= view.word(region).end() + 1
-		line = view.substr(view.line(region))
-		include = includes_re.match(line).group(1)
 
-		(file_name, exists) = get_file_name(view.file_name(), include)
-		if not exists :
+		location = view.word(region).end() + 1
+		line     = view.substr(view.line(region))
+		include  = includes_re.match(line).group(1)
+
+		file_name_view = view.file_name()
+
+		if file_name_view is None:
 			return
+		else:
+			( file_name, the_include_exists ) = get_file_name( file_name_view, include )
+
+			if not the_include_exists :
+				return
 
 		link_local = file_name + '#'
 		if not '.' in include :
@@ -217,7 +225,7 @@ class AMXXEditor(sublime_plugin.EventListener):
 					break
 
 		if found:
-			print_debug(0, "param2: [%s]" % simple_escape(found[1]))
+			print_debug(1, "param2: [%s]" % simple_escape(found[1]))
 			filename = os.path.basename(found[2])
 
 
@@ -279,11 +287,21 @@ class AMXXEditor(sublime_plugin.EventListener):
 			webbrowser.open_new_tab("http://www.amxmodx.org/api/"+file+"/"+search)
 
 	def on_activated_async(self, view) :
+
+		view_size = view.size()
+
+		print_debug(4, "on_activated_async(2)")
+		print_debug(4, "( on_activated_async ) view.match_selector(0, 'source.sma'): " + str( view.match_selector(0, 'source.sma') ))
+		# print_debug(4, "( on_activated_async ) nodes: " + str( nodes ))
+		print_debug(4, "( on_activated_async ) view.substr(): \n" \
+		        + view.substr( sublime.Region( 0, view_size if view_size < 200 else 200 ) ))
+
 		if not self.is_amxmodx_file(view):
+			print_debug(4, "( on_activated_async ) returning on` if not is_amxmodx_file(view)")
 			return
-		if not view.file_name() :
-			return
+
 		if not view.file_name() in nodes :
+			print_debug(4, "( on_activated_async ) returning on` if not view.file_name() in nodes")
 			add_to_queue(view)
 
 	def on_modified_async(self, view) :
@@ -311,16 +329,37 @@ class AMXXEditor(sublime_plugin.EventListener):
 		self.delay_queue.start()
 
 	def is_amxmodx_file(self, view) :
-		return view.file_name() is not None and view.match_selector(0, 'source.sma')
+		return view.match_selector(0, 'source.sma')
 
 	def on_query_completions(self, view, prefix, locations):
+		"""
+			This is a forward called by Sublime Text when it is about to show the use completions.
+			See: https://www.sublimetext.com/docs/3/api_reference.html#sublime_plugin.ViewEventListener
+		"""
 		if not self.is_amxmodx_file(view):
 			return None
 
 		if view.match_selector(locations[0], 'source.sma string') :
 			return ([], sublime.INHIBIT_WORD_COMPLETIONS | sublime.INHIBIT_EXPLICIT_COMPLETIONS)
 
-		return (self.generate_funcset(view.file_name()), sublime.INHIBIT_WORD_COMPLETIONS | sublime.INHIBIT_EXPLICIT_COMPLETIONS)
+		if view.file_name() is None:
+
+			file_name = str( view.buffer_id() )
+
+			# Just in case it is not processed yet
+			if not file_name in nodes :
+
+				print_debug(4, "( on_query_completions ) Adding buffer id " + file_name + " in nodes")
+				add_to_queue(view)
+
+				# The queue is not processed yet, so there is nothing to show
+				return None
+
+			return ( self.generate_funcset( file_name ), sublime.INHIBIT_WORD_COMPLETIONS | sublime.INHIBIT_EXPLICIT_COMPLETIONS )
+
+		else:
+
+			return ( self.generate_funcset ( view.file_name() ), sublime.INHIBIT_WORD_COMPLETIONS | sublime.INHIBIT_EXPLICIT_COMPLETIONS )
 
 	def generate_funcset(self, file_name) :
 		funcset = set()
@@ -352,10 +391,36 @@ class AMXXEditor(sublime_plugin.EventListener):
 		doctset.update(node.doct)
 
 
+def is_package_enabled( userSettings, package_name ):
+
+	print_debug(4, "is_package_enabled = " + sublime.packages_path()
+	        + "/All Autocomplete/ is dir? " \
+			+ str( os.path.isdir( sublime.packages_path() + "/" + package_name ) ))
+
+	print_debug(4, "is_package_enabled = " + sublime.installed_packages_path()
+	        + "/All Autocomplete.sublime-package is file? " \
+			+ str( os.path.isfile( sublime.installed_packages_path() + "/" + package_name + ".sublime-package" ) ))
+
+	ignoredPackages = userSettings.get('ignored_packages')
+
+	if ignoredPackages is not None:
+
+		return ( os.path.isdir( sublime.packages_path() + "/" + package_name ) \
+				or os.path.isfile( sublime.installed_packages_path() + "/" + package_name + ".sublime-package" ) ) \
+				and not package_name in ignoredPackages
+
+	return os.path.isdir( sublime.packages_path() + "/" + package_name ) \
+			or os.path.isfile( sublime.installed_packages_path() + "/" + package_name + ".sublime-package" )
+
 def on_settings_modified(is_loading=False):
 #{
-	print_debug( 1, "on_settings_modified" )
+	print_debug(4, "on_settings_modified" )
+
 	global g_enable_inteltip
+	global g_isAllAutoCompleteInstalled
+
+	userSettings 				 = sublime.load_settings("Preferences.sublime-settings")
+	g_isAllAutoCompleteInstalled = is_package_enabled( userSettings, "All Autocomplete" )
 
 	settings = sublime.load_settings("amxx.sublime-settings")
 	invalid  = is_invalid_settings(settings)
@@ -395,9 +460,9 @@ def on_settings_modified(is_loading=False):
 	g_include_dir 			= settings.get('include_directory')
 	g_add_paremeters		= settings.get('add_function_parameters')
 
-	print_debug( 1, "( on_settings_modified ) g_debug_level: %d" % g_debug_level )
-	print_debug( 1, "( on_settings_modified ) g_include_dir: " + g_include_dir )
-	print_debug( 1, "( on_settings_modified ) g_add_paremeters: " + str( g_add_paremeters ) )
+	print_debug(4, "( on_settings_modified ) g_debug_level: %d" % g_debug_level)
+	print_debug(4, "( on_settings_modified ) g_include_dir: " + g_include_dir)
+	print_debug(4, "( on_settings_modified ) g_add_paremeters: " + str( g_add_paremeters ))
 
 	# generate list of color schemes
 	global g_color_schemes, g_default_schemes
@@ -452,9 +517,19 @@ def add_to_queue_forward(view) :
 	sublime.set_timeout(lambda: add_to_queue(view), 0)
 
 def add_to_queue(view) :
-	# The view can only be accessed from the main thread, so run the regex
-	# now and process the results later
-	to_process.put((view.file_name(), view.substr(sublime.Region(0, view.size()))))
+	"""
+		The view can only be accessed from the main thread, so run the regex
+		now and process the results later
+	"""
+	print_debug(4, "( add_to_queue ) view.file_name(): " + str( view.file_name() ))
+
+	# When the view is not saved, we need to use its buffer id, instead of its file name.
+	view_file_name = view.file_name()
+
+	if view_file_name is None :
+		to_process.put( ( str( view.buffer_id() ), view.substr( sublime.Region( 0, view.size() ) ) ) )
+	else :
+		to_process.put( ( view_file_name, view.substr( sublime.Region( 0, view.size() ) ) ) )
 
 def add_include_to_queue(file_name) :
 	to_process.put((file_name, None))
@@ -493,6 +568,9 @@ class ProcessQueueThread(watchdog.utils.DaemonThread) :
 	def run(self) :
 		while self.should_keep_running() :
 			(file_name, view_buffer) = to_process.get()
+
+			# When the `view_buffer` is None, it means we are processing a file on the disk, instead
+			# of a file on an Sublime Text View (its text buffer).
 			if view_buffer is None :
 				self.process_existing_include(file_name)
 			else :
@@ -503,15 +581,21 @@ class ProcessQueueThread(watchdog.utils.DaemonThread) :
 
 		base_includes = set()
 
+		# Here we parse the text file to know which modules it is including.
 		includes = includes_re.findall(view_buffer)
 
+		# Now for each module it is including we load that include file to the autocomplete list.
 		for include in includes:
 			self.load_from_file(view_file_name, include, current_node, current_node, base_includes)
 
+		# For each module it was loaded but it not present on the current file we just switched,
+		# we remove that include file to the autocomplete list.
 		for removed_node in current_node.children.difference(base_includes) :
 			current_node.remove_child(removed_node)
 
-		process_buffer(view_buffer, current_node)
+		# To process the current file functions for autocomplete
+		if not g_isAllAutoCompleteInstalled :
+			process_buffer(view_buffer, current_node)
 
 	def process_existing_include(self, file_name) :
 		current_node = nodes.get(file_name)
@@ -521,7 +605,7 @@ class ProcessQueueThread(watchdog.utils.DaemonThread) :
 		base_includes = set()
 
 		with open(file_name, 'r') as f :
-			print_debug(0, "(analyzer) Processing Include File %s" % file_name)
+			print_debug(2, "(analyzer) Processing Include File %s" % file_name)
 			includes = include_re.findall(f.read())
 
 		for include in includes:
@@ -534,9 +618,11 @@ class ProcessQueueThread(watchdog.utils.DaemonThread) :
 
 
 	def load_from_file(self, view_file_name, base_file_name, parent_node, base_node, base_includes) :
+
 		(file_name, exists) = get_file_name(view_file_name, base_file_name)
+
 		if not exists :
-			print_debug(0, "(analyzer) Include File Not Found: %s" % base_file_name)
+			print_debug(1, "(analyzer) Include File Not Found: %s" % base_file_name)
 
 		(node, node_added) = get_or_add_node(file_name)
 		parent_node.add_child(node)
@@ -548,7 +634,7 @@ class ProcessQueueThread(watchdog.utils.DaemonThread) :
 			return
 
 		with open(file_name, 'r') as f :
-			print_debug(0, "(analyzer) Processing Include File %s" % file_name)
+			print_debug(2, "(analyzer) Processing Include File %s" % file_name)
 			includes = includes_re.findall(f.read())
 
 		for include in includes :
@@ -559,7 +645,7 @@ class ProcessQueueThread(watchdog.utils.DaemonThread) :
 
 def get_file_name(view_file_name, base_file_name) :
 
-	print_debug( 1, "get_file_name: " + g_include_dir )
+	print_debug(4, "get_file_name: " + g_include_dir)
 
 	if local_re.search(base_file_name) == None:
 		file_name = os.path.join(g_include_dir, base_file_name + '.inc')
@@ -568,7 +654,19 @@ def get_file_name(view_file_name, base_file_name) :
 
 	return (file_name, os.path.exists(file_name))
 
-def get_or_add_node( file_name) :
+def get_or_add_node(file_name) :
+	"""
+		Here if `file_name` is a buffer id as a string, I just check if the buffer exists.
+
+		However if it is a file name, I need to check if its a buffer id is present here, and
+		if so, I must to remove it and create a new node with the file name. This is necessary
+		because the file could be just create, parsed and then saved. Therefore after did so,
+		we need to keep reusing its buffer. But as it is saved we are using its file name instead
+		of its buffer id, then we need to remove the buffer id in order to avoid duplicated entries.
+
+		Though I am not implementing this here to save time and performance
+	"""
+
 	node = nodes.get(file_name)
 	if node is None :
 		node = Node(file_name)
@@ -634,7 +732,7 @@ class pawnParse :
 
 	def start(self, pFile, node) :
 	#{
-		print_debug(2, "(analyzer) CODE PARSE Start [%s]" % node.file_name)
+		print_debug(8, "(analyzer) CODE PARSE Start [%s]" % node.file_name)
 
 		self.file 				= pFile
 		self.file_name			= os.path.basename(node.file_name)
@@ -662,7 +760,7 @@ class pawnParse :
 			self.save_const_timer.start()
 		#}
 
-		print_debug(2, "(analyzer) CODE PARSE End [%s]" % node.file_name)
+		print_debug(8, "(analyzer) CODE PARSE End [%s]" % node.file_name)
 	#}
 
 	def save_constants(self) :
@@ -683,7 +781,7 @@ class pawnParse :
 		f.write(syntax)
 		f.close()
 
-		print_debug(2, "(analyzer) call save_constants()")
+		print_debug(8, "(analyzer) call save_constants()")
 	#}
 
 	def read_line(self) :
@@ -811,7 +909,7 @@ class pawnParse :
 		self.add_autocomplete(buffer, 'enum', split[0])
 		self.add_constant(split[0])
 
-		print_debug(2, "(analyzer) parse_enum add: [%s] -> [%s]" % (buffer, split[0]))
+		print_debug(8, "(analyzer) parse_enum add: [%s] -> [%s]" % (buffer, split[0]))
 	#}
 
 	def add_autocomplete(self, name, info, autocomplete) :
@@ -879,7 +977,7 @@ class pawnParse :
 			self.add_autocomplete(name, 'define: '+value, name)
 			self.add_constant(name)
 
-			print_debug(2, "(analyzer) parse_define add: [%s]" % name)
+			print_debug(8, "(analyzer) parse_define add: [%s]" % name)
 		#}
 	#}
 
@@ -903,7 +1001,7 @@ class pawnParse :
 
 		self.add_autocomplete(name, 'const: '+value, name)
 		self.add_constant(name)
-		print_debug(2, "(analyzer) parse_const add: [%s]" % name)
+		print_debug(8, "(analyzer) parse_const add: [%s]" % name)
 	#}
 
 	def parse_variable(self, buffer) :
@@ -970,7 +1068,7 @@ class pawnParse :
 
 						if (varName != '') :
 							self.add_autocomplete(varName, 'var', varName)
-							print_debug(2, "(analyzer) parse_variable add: [%s]" % varName)
+							print_debug(8, "(analyzer) parse_variable add: [%s]" % varName)
 
 						varName = ''
 						parseName = False
@@ -999,7 +1097,7 @@ class pawnParse :
 				varName = varName.strip()
 				if varName != '' :
 					self.add_autocomplete(varName, 'var', varName)
-					print_debug(2, "(analyzer) parse_variable add: [%s]" % varName)
+					print_debug(8, "(analyzer) parse_variable add: [%s]" % varName)
 			#}
 			else :
 			#{
@@ -1118,7 +1216,7 @@ class pawnParse :
 
 		split = remaining.split('(', 1)
 		if len(split) < 2 :
-			print_debug(1, "(analyzer) parse_params return1: [%s]" % split)
+			print_debug(4, "(analyzer) parse_params return1: [%s]" % split)
 			return 1
 
 		remaining = split[1]
@@ -1135,7 +1233,7 @@ class pawnParse :
 			return 0
 
 		if not self.valid_name(funcname) :
-			print_debug(1, "(analyzer) parse_params invalid name: [%s]" % funcname)
+			print_debug(4, "(analyzer) parse_params invalid name: [%s]" % funcname)
 			return 1
 
 		remaining = remaining.strip()
@@ -1158,12 +1256,12 @@ class pawnParse :
 
 		else:
 
-			autocomplete = funcname
+			autocomplete = funcname + "()"
 
 		self.add_autocomplete(funcname, FUNC_TYPES[type].lower(), autocomplete)
 		self.node.doct.add((funcname, func[func.find("(")+1:-1], self.node.file_name, type, returntype))
 
-		print_debug(2, "(analyzer) parse_params add: [%s]" % func)
+		print_debug(8, "(analyzer) parse_params add: [%s]" % func)
 		return 0
 	#}
 
@@ -1183,16 +1281,29 @@ def process_include_file(node) :
 
 def simple_escape(html) :
 #{
-    return html.replace('&', '&amp;')
+	return html.replace('&', '&amp;')
 #}
 
 def print_debug(level, msg) :
 #{
-	if g_debug_level >= level :
-		print("[AMXX-Editor]: " + msg)
+	global print_debug_lastTime
+	currentTime = datetime.datetime.now().microsecond
+
+	# You can access global variables without the global keyword.
+	if g_debug_level & level != 0:
+
+		print( "[AMXX-Editor] " \
+				+ str( datetime.datetime.now().hour ) + ":" \
+				+ str( datetime.datetime.now().minute ) + ":" \
+				+ str( datetime.datetime.now().second ) + ":" \
+				+ str( currentTime ) \
+				+ "%7s " % str( currentTime - print_debug_lastTime ) \
+				+ msg )
+
+		print_debug_lastTime = currentTime
 #}
 
-EDITOR_VERSION = "2.2"
+EDITOR_VERSION = "3.0"
 FUNC_TYPES = [ "Function", "Public", "Stock", "Forward", "Native" ]
 
 g_default_schemes = [ "atomic", "dark", "mistrick", "npp", "twlight", "white" ]
@@ -1201,10 +1312,10 @@ g_constants_list = set()
 g_inteltip_style = ""
 g_enable_inteltip = False
 g_enable_buildversion = False
-g_debug_level = 0
 g_delay_time = 1.0
 g_include_dir = "."
 g_add_paremeters = False
+g_isAllAutoCompleteInstalled = False
 
 to_process = OrderedSetQueue()
 nodes = dict()
@@ -1214,3 +1325,19 @@ file_event_handler = IncludeFileEventHandler()
 includes_re = re.compile('^[\\s]*#include[\\s]+[<"]([^>"]+)[>"]', re.MULTILINE)
 local_re = re.compile('\\.(sma|inc)$')
 pawnparse = pawnParse()
+
+# Debugging
+startTime = datetime.datetime.now()
+print_debug_lastTime = startTime.microsecond
+
+# Enable editor debug messages: (bitwise)
+#
+# 0  - Disabled debugging.
+# 1  - Errors messages.
+# 2  - Outputs when it starts a file parsing.
+# 4  - General messages.
+# 8  - Analyzer parser.
+# 15 - All debugging levels at the same time.
+g_debug_level = 0
+
+
