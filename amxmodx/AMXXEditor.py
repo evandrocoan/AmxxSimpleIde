@@ -9,7 +9,7 @@ import webbrowser
 import datetime
 import time
 import urllib.request
-from collections import defaultdict
+from collections import defaultdict, OrderedDict
 from queue import *
 from threading import Timer, Thread
 
@@ -18,6 +18,9 @@ import watchdog.events
 import watchdog.observers
 import watchdog.utils
 from watchdog.utils.bricks import OrderedSetQueue
+
+from os.path import basename
+
 
 def plugin_loaded() :
 #{
@@ -32,7 +35,8 @@ def unload_handler() :
 #{
 	file_observer.stop()
 	process_thread.stop()
-	to_process.put(("", ""))
+
+	processingSetQueue.put(("", ""))
 	sublime.load_settings("amxx.sublime-settings").clear_on_change("amxx")
 #}
 
@@ -146,13 +150,13 @@ class AMXXEditor(sublime_plugin.EventListener):
 			return
 
 		view = window.active_view()
-		if not self.is_amxmodx_file(view) or not g_enable_buildversion :
+		if not is_amxmodx_file(view) or not g_enable_buildversion :
 			return
 
 		view.run_command("amxx_build_ver")
 
 	def on_selection_modified_async(self, view) :
-		if not self.is_amxmodx_file(view) or not g_enable_inteltip :
+		if not is_amxmodx_file(view) or not g_enable_inteltip :
 			return
 
 		region = view.sel()[0]
@@ -292,11 +296,12 @@ class AMXXEditor(sublime_plugin.EventListener):
 
 		print_debug(4, "on_activated_async(2)")
 		print_debug(4, "( on_activated_async ) view.match_selector(0, 'source.sma'): " + str( view.match_selector(0, 'source.sma') ))
+
 		# print_debug(4, "( on_activated_async ) nodes: " + str( nodes ))
 		print_debug(4, "( on_activated_async ) view.substr(): \n" \
-		        + view.substr( sublime.Region( 0, view_size if view_size < 200 else 200 ) ))
+				+ view.substr( sublime.Region( 0, view_size if view_size < 200 else 200 ) ))
 
-		if not self.is_amxmodx_file(view):
+		if not is_amxmodx_file(view):
 			print_debug(4, "( on_activated_async ) returning on` if not is_amxmodx_file(view)")
 			return
 
@@ -314,12 +319,12 @@ class AMXXEditor(sublime_plugin.EventListener):
 		self.add_to_queue_now(view)
 
 	def add_to_queue_now(self, view) :
-		if not self.is_amxmodx_file(view):
+		if not is_amxmodx_file(view):
 			return
 		add_to_queue(view)
 
 	def add_to_queue_delayed(self, view) :
-		if not self.is_amxmodx_file(view):
+		if not is_amxmodx_file(view):
 			return
 
 		if self.delay_queue is not None :
@@ -328,57 +333,72 @@ class AMXXEditor(sublime_plugin.EventListener):
 		self.delay_queue = Timer(float(g_delay_time), add_to_queue_forward, [ view ])
 		self.delay_queue.start()
 
-	def is_amxmodx_file(self, view) :
-		return view.match_selector(0, 'source.sma')
-
 	def on_query_completions(self, view, prefix, locations):
 		"""
 			This is a forward called by Sublime Text when it is about to show the use completions.
 			See: https://www.sublimetext.com/docs/3/api_reference.html#sublime_plugin.ViewEventListener
 		"""
-		if not self.is_amxmodx_file(view):
-			return None
+		view_file_name = view.file_name()
 
-		if view.match_selector(locations[0], 'source.sma string') :
-			return ([], sublime.INHIBIT_WORD_COMPLETIONS | sublime.INHIBIT_EXPLICIT_COMPLETIONS)
+		if is_amxmodx_file(view):
 
-		if view.file_name() is None:
+			if view_file_name is None:
+				view_file_name = str( view.buffer_id() )
 
-			file_name = str( view.buffer_id() )
+				# Just in case it is not processed yet
+				if not view_file_name in nodes:
 
-			# Just in case it is not processed yet
-			if not file_name in nodes :
+					print_debug(4, "( on_query_completions ) Adding buffer id " + view_file_name + " in nodes")
+					add_to_queue_forward( view )
 
-				print_debug(4, "( on_query_completions ) Adding buffer id " + file_name + " in nodes")
-				add_to_queue(view)
+					# The queue is not processed yet, so there is nothing to show
+					if g_word_autocomplete:
+						return self.generate_funcset( view_file_name, view, prefix, locations, False )
+					else:
+						return ( [], sublime.INHIBIT_WORD_COMPLETIONS )
 
-				# The queue is not processed yet, so there is nothing to show
-				return None
+				if g_word_autocomplete:
+					return self.generate_funcset( view_file_name, view, prefix, locations )
+				else:
+					return ( self.generate_funcset( view_file_name, view, prefix, locations ), sublime.INHIBIT_WORD_COMPLETIONS )
+			else:
 
-			return ( self.generate_funcset( file_name ), sublime.INHIBIT_WORD_COMPLETIONS | sublime.INHIBIT_EXPLICIT_COMPLETIONS )
+				if g_word_autocomplete:
+					return self.generate_funcset( view_file_name, view, prefix, locations )
+				else:
+					return ( self.generate_funcset( view_file_name, view, prefix, locations ), sublime.INHIBIT_WORD_COMPLETIONS )
 
-		else:
+		return self.generate_funcset( view_file_name, view, prefix, locations, False )
 
-			return ( self.generate_funcset ( view.file_name() ), sublime.INHIBIT_WORD_COMPLETIONS | sublime.INHIBIT_EXPLICIT_COMPLETIONS )
+	def generate_funcset( self, file_name, view, prefix, locations, isToIncludeFunctions=True ) :
+		func_list = []
+		words_set = set()
 
-	def generate_funcset(self, file_name) :
-		funcset = set()
-		visited = set()
+		if isToIncludeFunctions and file_name in nodes:
+			visited = set()
+			node    = nodes[file_name]
 
-		node = nodes[file_name]
+			if isToIncludeFunctions and not view.match_selector(locations[0], 'source.sma string') :
+				self.generate_funcset_recur( node, func_list, visited, words_set )
 
-		self.generate_funcset_recur(node, funcset, visited)
-		return sorted_nicely(funcset)
+		words_list = self.all_views_autocomplete( view, prefix, locations, words_set )
 
-	def generate_funcset_recur(self, node, funcset, visited) :
+		# print_debug( 16, "( generate_funcset ) func_list size: %d" % len( func_list ) )
+		# print_debug( 16, "( generate_funcset ) func_list items: " + str( sort_nicely( func_list ) ) )
+		return words_list + list( func_list )
+
+	def generate_funcset_recur( self, node, func_list, visited, words_set ) :
+
 		if node in visited :
 			return
 
-		visited.add(node)
-		for child in node.children :
-			self.generate_funcset_recur(child, funcset, visited)
+		visited.add( node )
 
-		funcset.update(node.funcs)
+		for child in node.children :
+			self.generate_funcset_recur( child, func_list, visited, words_set )
+
+		func_list.extend( node.funcs )
+		words_set.update( node.words )
 
 	def generate_doctset_recur(self, node, doctset, visited) :
 		if node in visited :
@@ -390,37 +410,152 @@ class AMXXEditor(sublime_plugin.EventListener):
 
 		doctset.update(node.doct)
 
+	def all_views_autocomplete( self, active_view, prefix, locations, g_words_set ):
+		print_debug( 16, "AMXXEditor::all_views_autocomplete(5)" )
+		# print_debug( 16, "( all_views_autocomplete ) g_words_set size: %d" % len( g_words_set ) )
 
-def is_package_enabled( userSettings, package_name ):
+		words_set  = g_words_set.copy()
+		words_list = []
+		start_time = time.time()
 
-	print_debug(4, "is_package_enabled = " + sublime.packages_path()
-	        + "/All Autocomplete/ is dir? " \
-			+ str( os.path.isdir( sublime.packages_path() + "/" + package_name ) ))
+		if g_word_autocomplete:
+			view_words = None
 
-	print_debug(4, "is_package_enabled = " + sublime.installed_packages_path()
-	        + "/All Autocomplete.sublime-package is file? " \
-			+ str( os.path.isfile( sublime.installed_packages_path() + "/" + package_name + ".sublime-package" ) ))
+			if len( locations ) > 0:
+				view_words = active_view.extract_completions( prefix, locations[0] )
+			else:
+				view_words = active_view.extract_completions( prefix )
 
-	ignoredPackages = userSettings.get('ignored_packages')
+			view_words = fix_truncation( active_view, view_words )
 
-	if ignoredPackages is not None:
+			for word in view_words:
+				# Remove the annoying `(` on the string
+				word = word.replace('$', '\\$').split('(')[0]
 
-		return ( os.path.isdir( sublime.packages_path() + "/" + package_name ) \
-				or os.path.isfile( sublime.installed_packages_path() + "/" + package_name + ".sublime-package" ) ) \
-				and not package_name in ignoredPackages
+				if word not in words_set:
+					words_set.add( word )
+					words_list.append( ( word, word ) )
 
-	return os.path.isdir( sublime.packages_path() + "/" + package_name ) \
-			or os.path.isfile( sublime.installed_packages_path() + "/" + package_name + ".sublime-package" )
+				if time.time() - start_time > 0.1:
+					break
+
+		# print_debug( 16, "( all_views_autocomplete ) Current views loop took: %f" % ( time.time() - start_time ) )
+		# print_debug( 16, "( all_views_autocomplete ) words_set size: %d" % len( words_set ) )
+
+		if g_use_all_autocomplete:
+			# Limit number of views but always include the active view. This
+			# view goes first to prioritize matches close to cursor position.
+			views = sublime.active_window().views()
+
+			buffers_id_set = set()
+			view_words 	   = None
+			view_base_name = None
+
+			buffers_id_set.add( active_view.buffer_id() )
+
+			for view in views:
+				view_buffer_id = view.buffer_id()
+				# print_debug( 16, "( all_views_autocomplete ) view: %d" % view.id() )
+				# print_debug( 16, "( all_views_autocomplete ) buffers_id: %d" % view_buffer_id )
+				# print_debug( 16, "( all_views_autocomplete ) buffers_id_set size: %d" % len( buffers_id_set ) )
+
+				if view_buffer_id not in buffers_id_set:
+					buffers_id_set.add( view_buffer_id )
+
+					view_words     = view.extract_completions(prefix)
+					view_words     = fix_truncation(view, view_words)
+					view_base_name = os.path.basename( view.file_name() )
+
+					for word in view_words:
+						# Remove the annoying `(` on the string
+						word = word.replace('$', '\\$').split('(')[0]
+
+						if word not in words_set:
+							# print_debug( 16, "( all_views_autocomplete ) word: %s" % word )
+							words_set.add( word )
+							words_list.append( ( word + '  \t' + view_base_name, word ) )
+
+						if time.time() - start_time > 0.3:
+							# print_debug( 16, "( all_views_autocomplete ) Breaking all views loop after: %f" % time.time() - start_time )
+							# print_debug( 16, "( all_views_autocomplete ) words_set size: %d" % len( words_set ) )
+							return words_list
+
+		# print_debug( 16, "( all_views_autocomplete ) All views loop took: %f" % ( time.time() - start_time ) )
+		# print_debug( 16, "( all_views_autocomplete ) words_set size: %d" % len( words_set ) )
+		return words_list
+
+
+def filter_words(words):
+	words = words[0:MAX_WORDS_PER_VIEW]
+	return [w for w in words if MIN_WORD_SIZE <= len(w) <= MAX_WORD_SIZE]
+
+
+# keeps first instance of every word and retains the original order
+# (n^2 but should not be a problem as len(words) <= MAX_VIEWS*MAX_WORDS_PER_VIEW)
+def without_duplicates(words):
+	result = []
+	used_words = []
+	for w, v in words:
+		if w not in used_words:
+			used_words.append(w)
+			result.append((w, v))
+	return result
+
+
+# Ugly workaround for truncation bug in Sublime when using view.extract_completions()
+# in some types of files.
+def fix_truncation(view, words):
+	fixed_words = []
+	start_time = time.time()
+
+	for i, w in enumerate(words):
+		#The word is truncated if and only if it cannot be found with a word boundary before and after
+
+		# this fails to match strings with trailing non-alpha chars, like
+		# 'foo?' or 'bar!', which are common for instance in Ruby.
+		match = view.find(r'\b' + re.escape(w) + r'\b', 0)
+		truncated = is_empty_match(match)
+		if truncated:
+			#Truncation is always by a single character, so we extend the word by one word character before a word boundary
+			extended_words = []
+			view.find_all(r'\b' + re.escape(w) + r'\w\b', 0, "$0", extended_words)
+			if len(extended_words) > 0:
+				fixed_words += extended_words
+			else:
+				# to compensate for the missing match problem mentioned above, just
+				# use the old word if we didn't find any extended matches
+				fixed_words.append(w)
+		else:
+			#Pass through non-truncated words
+			fixed_words.append(w)
+
+		# if too much time is spent in here, bail out,
+		# and don't bother fixing the remaining words
+		if time.time() - start_time > MAX_FIX_TIME_SECS_PER_VIEW:
+			return fixed_words + words[i+1:]
+
+	return fixed_words
+
+
+if sublime.version() >= '3000':
+	def is_empty_match(match):
+		return match.empty()
+else:
+	def is_empty_match(match):
+		return match is None
+
+
+def is_amxmodx_file(view) :
+	return view.match_selector(0, 'source.sma')
+
 
 def on_settings_modified(is_loading=False):
 #{
 	print_debug(4, "on_settings_modified" )
-
 	global g_enable_inteltip
-	global g_isAllAutoCompleteInstalled
-
-	userSettings 				 = sublime.load_settings("Preferences.sublime-settings")
-	g_isAllAutoCompleteInstalled = is_package_enabled( userSettings, "All Autocomplete" )
+	global g_word_autocomplete
+	global g_function_autocomplete
+	global g_use_all_autocomplete
 
 	settings = sublime.load_settings("amxx.sublime-settings")
 	invalid  = is_invalid_settings(settings)
@@ -455,10 +590,13 @@ def on_settings_modified(is_loading=False):
 
 	g_enable_inteltip 		= settings.get('enable_inteltip', True)
 	g_enable_buildversion 	= settings.get('enable_buildversion', False)
+	g_word_autocomplete 	= settings.get('word_autocomplete', False)
+	g_use_all_autocomplete 	= settings.get('use_all_autocomplete', False)
+	g_function_autocomplete = settings.get('function_autocomplete', False)
 	g_debug_level 			= settings.get('debug_level', 0)
 	g_delay_time			= settings.get('live_refresh_delay', 1.0)
 	g_include_dir 			= settings.get('include_directory')
-	g_add_paremeters		= settings.get('add_function_parameters')
+	g_add_paremeters		= settings.get('add_function_parameters', False)
 
 	print_debug(4, "( on_settings_modified ) g_debug_level: %d" % g_debug_level)
 	print_debug(4, "( on_settings_modified ) g_include_dir: " + g_include_dir)
@@ -478,7 +616,7 @@ def on_settings_modified(is_loading=False):
 	g_color_schemes['count'] = len(g_color_schemes['list'])
 
 	file_observer.unschedule_all()
-	file_observer.schedule(file_event_handler, g_include_dir, True)
+	file_observer.schedule( file_event_handler, g_include_dir, True )
 #}
 
 def is_invalid_settings(settings) :
@@ -507,14 +645,17 @@ def fix_path(settings, key) :
 	settings.set(key, path)
 #}
 
-def sorted_nicely( l ):
-	""" Sort the given iterable in the way that humans expect."""
+def sort_nicely( words_set ):
+	"""
+		Sort the given iterable in the way that humans expect.
+	"""
 	convert = lambda text: int(text) if text.isdigit() else text
 	alphanum_key = lambda key: [ convert(c) for c in re.split('([0-9]+)', key[0]) ]
-	return sorted(l, key = alphanum_key)
+
+	return sorted( words_set, key = alphanum_key )
 
 def add_to_queue_forward(view) :
-	sublime.set_timeout(lambda: add_to_queue(view), 0)
+	sublime.set_timeout_async(lambda: add_to_queue(view), 5000)
 
 def add_to_queue(view) :
 	"""
@@ -527,12 +668,20 @@ def add_to_queue(view) :
 	view_file_name = view.file_name()
 
 	if view_file_name is None :
-		to_process.put( ( str( view.buffer_id() ), view.substr( sublime.Region( 0, view.size() ) ) ) )
+		name = str( view.buffer_id() )
+
+		if name not in processingSetQueue_set:
+			processingSetQueue_set.add( name )
+			processingSetQueue.put( ( name, view.substr( sublime.Region( 0, view.size() ) ) ) )
 	else :
-		to_process.put( ( view_file_name, view.substr( sublime.Region( 0, view.size() ) ) ) )
+		if view_file_name not in processingSetQueue_set:
+			processingSetQueue_set.add( view_file_name )
+			processingSetQueue.put( ( view_file_name, view.substr( sublime.Region( 0, view.size() ) ) ) )
 
 def add_include_to_queue(file_name) :
-	to_process.put((file_name, None))
+	if file_name not in processingSetQueue_set:
+		processingSetQueue_set.add( file_name )
+		processingSetQueue.put((file_name, None))
 
 class IncludeFileEventHandler(watchdog.events.FileSystemEventHandler) :
 	def __init__(self) :
@@ -567,7 +716,12 @@ def is_active(file_name) :
 class ProcessQueueThread(watchdog.utils.DaemonThread) :
 	def run(self) :
 		while self.should_keep_running() :
-			(file_name, view_buffer) = to_process.get()
+			(file_name, view_buffer) = processingSetQueue.get()
+
+			try:
+				processingSetQueue_set.remove( file_name )
+			except:
+				pass
 
 			# When the `view_buffer` is None, it means we are processing a file on the disk, instead
 			# of a file on an Sublime Text View (its text buffer).
@@ -580,6 +734,7 @@ class ProcessQueueThread(watchdog.utils.DaemonThread) :
 		(current_node, node_added) = get_or_add_node(view_file_name)
 
 		base_includes = set()
+		pawnParse.clearUniqueCompletionBuffer();
 
 		# Here we parse the text file to know which modules it is including.
 		includes = includes_re.findall(view_buffer)
@@ -594,8 +749,7 @@ class ProcessQueueThread(watchdog.utils.DaemonThread) :
 			current_node.remove_child(removed_node)
 
 		# To process the current file functions for autocomplete
-		if not g_isAllAutoCompleteInstalled :
-			process_buffer(view_buffer, current_node)
+		process_buffer(view_buffer, current_node)
 
 	def process_existing_include(self, file_name) :
 		current_node = nodes.get(file_name)
@@ -682,8 +836,15 @@ class Node :
 		self.file_name = file_name
 		self.children = set()
 		self.parents = set()
-		self.funcs = set()
+		self.funcs = []
+		self.words = set()
 		self.doct = set()
+
+		try:
+			float(file_name)
+			self.isFromBufferOnly = True
+		except ValueError:
+			self.isFromBufferOnly = False
 
 	def add_child(self, node) :
 		self.children.add(node)
@@ -699,7 +860,8 @@ class Node :
 	def remove_all_children_and_funcs(self) :
 		for child in self.children :
 			self.remove_child(node)
-		self.funcs.clear()
+		del self.funcs[:]
+		self.words.clear()
 		self.doct.clear()
 #}
 
@@ -724,16 +886,25 @@ class TextReader:
 	#}
 #}
 
-class pawnParse :
+class PawnParse :
 #{
 	def __init__(self) :
+		self.node = None
+		self.isTheCurrentFile = False
 		self.save_const_timer = None
 		self.constants_count = 0
 
-	def start(self, pFile, node) :
-	#{
+	def clearUniqueCompletionBuffer(self) :
+		if self.node is not None:
+			self.node.words.clear()
+
+	def start( self, pFile, node, isTheCurrentFile=False ) :
+		"""
+			When the buffer is not None, it is always the current file.
+		"""
 		print_debug(8, "(analyzer) CODE PARSE Start [%s]" % node.file_name)
 
+		self.isTheCurrentFile   = isTheCurrentFile
 		self.file 				= pFile
 		self.file_name			= os.path.basename(node.file_name)
 		self.node 				= node
@@ -743,10 +914,9 @@ class pawnParse :
 		self.skip_next_dataline = False
 		self.enum_contents 		= ''
 		self.brace_level 		= 0
-
 		self.restore_buffer 	= None
 
-		self.node.funcs.clear()
+		del self.node.funcs[:]
 		self.node.doct.clear()
 
 		self.start_parse()
@@ -767,6 +937,10 @@ class pawnParse :
 	#{
 		self.save_const_timer 	= None
 		self.constants_count 	= len(g_constants_list)
+
+		# If you have a project within 10000 files, each time this is updated, will for sublime to
+		# process again all the files.
+		return
 
 		constants = "___test"
 		for const in g_constants_list :
@@ -809,7 +983,10 @@ class pawnParse :
 		result = ''
 		i = 0
 
-		while i < len(buffer) :
+		# print_debug( 1, str( buffer ) )
+		buffer_length = len(buffer)
+
+		while i < buffer_length :
 			if buffer[i] == '/' and i + 1 < len(buffer):
 				if buffer[i + 1] == '/' :
 					self.brace_level +=  result.count('{') - result.count('}')
@@ -836,6 +1013,8 @@ class pawnParse :
 	#{
 		num_brace = 0
 		inString = False
+		inChar = False
+
 		self.skip_brace_found = False
 
 		buffer = buffer + ' '
@@ -847,21 +1026,44 @@ class pawnParse :
 		#{
 			i = 0
 			pos = 0
-			oldChar = ''
+			lastChar = ''
+
+			# print_debug( 1, "skip_function_block: " + buffer )
 
 			for c in buffer :
 			#{
 				i += 1
 
-				if (c == '"') :
-				#{
-					if inString and oldChar != '^' :
+				if not inString and not inChar and lastChar == '*' and c == '/' :
+					self.found_comment = False
+
+				if not inString and not inChar and self.found_comment:
+					lastChar = c
+					continue
+
+				if not inString and not inChar and lastChar == '/' and c == '*' :
+					self.found_comment = True
+					lastChar = c
+					continue
+
+				if not inString and not inChar and c == '/' and lastChar == '/' :
+					break
+
+				if c == '"' :
+
+					if inString and lastChar != '^' :
 						inString = False
 					else :
 						inString = True
-				#}
 
-				if (inString == False) :
+				if not inString and c == '\'' :
+
+					if inChar and lastChar != '^' :
+						inChar = False
+					else :
+						inChar = True
+
+				if not inString and not inChar :
 				#{
 					if (c == '{') :
 						num_brace += 1
@@ -871,7 +1073,7 @@ class pawnParse :
 						pos = i
 				#}
 
-				oldChar = c
+				lastChar = c
 			#}
 
 			if num_brace == 0 :
@@ -882,7 +1084,7 @@ class pawnParse :
 		#}
 	#}
 
-	def valid_name(self, name) :
+	def is_valid_name(self, name) :
 	#{
 		if not name or not name[0].isalpha() and name[0] != '_' :
 			return False
@@ -896,6 +1098,7 @@ class pawnParse :
 		if fixname :
 			name = fixname.group(1)
 			g_constants_list.add(name)
+			self.node.words.add( name )
 	#}
 
 	def add_enum(self, buffer) :
@@ -906,27 +1109,59 @@ class pawnParse :
 
 		split = buffer.split('[')
 
-		self.add_autocomplete(buffer, 'enum', split[0])
+		self.add_general_autocomplete(buffer, 'enum', split[0])
 		self.add_constant(split[0])
 
 		print_debug(8, "(analyzer) parse_enum add: [%s] -> [%s]" % (buffer, split[0]))
 	#}
 
-	def add_autocomplete(self, name, info, autocomplete) :
+	def add_general_autocomplete(self, name, info, autocomplete) :
 	#{
-		self.node.funcs.add((name +'  \t'+  self.file_name +' - '+ info, autocomplete))
+		self.node.words.add( name )
+
+		if self.node.isFromBufferOnly or self.isTheCurrentFile:
+			self.node.funcs.append( (name + '\t - ' + info, autocomplete) )
+		else:
+			self.node.funcs.append( (name + '  \t' +  self.file_name + ' - ' + info, autocomplete) )
+
 	#}
+
+	def add_function_autocomplete(self, name, info, autocomplete, param_count) :
+	#{
+		show_name = name + "(" + str( param_count ) + ")"
+		self.node.words.add( name )
+
+		if self.node.isFromBufferOnly or self.isTheCurrentFile:
+			self.node.funcs.append( (show_name + '\t - ' + info, autocomplete) )
+		else:
+			self.node.funcs.append( (show_name + '  \t'+  self.file_name + ' - ' + info, autocomplete) )
+	#}
+
+	def add_word_autocomplete(self, name) :
+		"""
+			Used to add a word to the auto completion of the current buffer. Therefore, it does not
+			need the file name as the auto completion for words from other files/sources.
+		"""
+		if name not in self.node.words:
+			self.node.words.add( name )
+			if self.isTheCurrentFile:
+				self.node.funcs.append( ( name, name ) )
+			else:
+				self.node.funcs.append( ( name + '\t - '+ self.file_name, name ) )
+
 
 	def start_parse(self) :
 	#{
 		while True :
 		#{
 			buffer = self.read_line()
+			# print_debug( 1, str( buffer ) )
 
 			if buffer is None :
 				break
 
 			buffer = self.read_string(buffer)
+
 			if len(buffer) <= 0 :
 				continue
 
@@ -974,7 +1209,7 @@ class pawnParse :
 			buffer = ''
 			name = define.group(1)
 			value = define.group(2).strip()
-			self.add_autocomplete(name, 'define: '+value, name)
+			self.add_general_autocomplete(name, 'define: ' + value, name)
 			self.add_constant(name)
 
 			print_debug(8, "(analyzer) parse_define add: [%s]" % name)
@@ -999,7 +1234,7 @@ class pawnParse :
 			value = value[0:newline]
 		#}
 
-		self.add_autocomplete(name, 'const: '+value, name)
+		self.add_general_autocomplete(name, 'const: ' + value, name)
 		self.add_constant(name)
 		print_debug(8, "(analyzer) parse_const add: [%s]" % name)
 	#}
@@ -1012,7 +1247,7 @@ class pawnParse :
 			buffer = buffer[4:]
 
 		varName = ""
-		oldChar = ''
+		lastChar = ''
 		i = 0
 		pos = 0
 		num_brace = 0
@@ -1033,7 +1268,7 @@ class pawnParse :
 
 				if (c == '"') :
 				#{
-					if (inString and oldChar != '^') :
+					if (inString and lastChar != '^') :
 						inString = False
 					else :
 						inString = True
@@ -1067,7 +1302,7 @@ class pawnParse :
 						varName = varName.strip()
 
 						if (varName != '') :
-							self.add_autocomplete(varName, 'var', varName)
+							self.add_word_autocomplete( varName )
 							print_debug(8, "(analyzer) parse_variable add: [%s]" % varName)
 
 						varName = ''
@@ -1089,14 +1324,14 @@ class pawnParse :
 						skipSpaces = True
 				#}
 
-				oldChar = c
+				lastChar = c
 			#}
 
 			if (c != ',') :
 			#{
 				varName = varName.strip()
 				if varName != '' :
-					self.add_autocomplete(varName, 'var', varName)
+					self.add_word_autocomplete( varName )
 					print_debug(8, "(analyzer) parse_variable add: [%s]" % varName)
 			#}
 			else :
@@ -1232,7 +1467,7 @@ class pawnParse :
 		if funcname.startswith("operator") :
 			return 0
 
-		if not self.valid_name(funcname) :
+		if not self.is_valid_name(funcname) :
 			print_debug(4, "(analyzer) parse_params invalid name: [%s]" % funcname)
 			return 1
 
@@ -1258,7 +1493,7 @@ class pawnParse :
 
 			autocomplete = funcname + "()"
 
-		self.add_autocomplete(funcname, FUNC_TYPES[type].lower(), autocomplete)
+		self.add_function_autocomplete(funcname, FUNC_TYPES[type].lower(), autocomplete, len( params ))
 		self.node.doct.add((funcname, func[func.find("(")+1:-1], self.node.file_name, type, returntype))
 
 		print_debug(8, "(analyzer) parse_params add: [%s]" % func)
@@ -1269,14 +1504,15 @@ class pawnParse :
 
 def process_buffer(text, node) :
 #{
-	text_reader = TextReader(text)
-	pawnparse.start(text_reader, node)
+	if g_function_autocomplete:
+		text_reader = TextReader(text)
+		pawnParse.start(text_reader, node, True)
 #}
 
 def process_include_file(node) :
 #{
 	with open(node.file_name) as file :
-		pawnparse.start(file, node)
+		pawnParse.start(file, node)
 #}
 
 def simple_escape(html) :
@@ -1315,16 +1551,27 @@ g_enable_buildversion = False
 g_delay_time = 1.0
 g_include_dir = "."
 g_add_paremeters = False
-g_isAllAutoCompleteInstalled = False
+g_word_autocomplete = False
+g_use_all_autocomplete = False
+g_function_autocomplete = False
 
-to_process = OrderedSetQueue()
+processingSetQueue = OrderedSetQueue()
+processingSetQueue_set = set()
 nodes = dict()
 file_observer = watchdog.observers.Observer()
 process_thread = ProcessQueueThread()
 file_event_handler = IncludeFileEventHandler()
 includes_re = re.compile('^[\\s]*#include[\\s]+[<"]([^>"]+)[>"]', re.MULTILINE)
 local_re = re.compile('\\.(sma|inc)$')
-pawnparse = pawnParse()
+pawnParse = PawnParse()
+
+# limits to prevent bogging down the system
+MIN_WORD_SIZE = 3
+MAX_WORD_SIZE = 50
+
+MAX_VIEWS = 20
+MAX_WORDS_PER_VIEW = 100
+MAX_FIX_TIME_SECS_PER_VIEW = 0.01
 
 # Debugging
 startTime = datetime.datetime.now()
@@ -1337,7 +1584,8 @@ print_debug_lastTime = startTime.microsecond
 # 2  - Outputs when it starts a file parsing.
 # 4  - General messages.
 # 8  - Analyzer parser.
-# 15 - All debugging levels at the same time.
+# 16 - Autocomplete debugging.
+# 31 - All debugging levels at the same time.
 g_debug_level = 0
 
 

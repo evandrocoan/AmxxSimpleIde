@@ -6,9 +6,13 @@
 
 [anchor]changelog[/anchor][SIZE="5"][B]Change log[/B][/SIZE] [goanchor=Top]Go to top[/goanchor]
 [code]
-v1.2.2 | 2017-01-08
+v1.3 | 2017-01-10
  * Fixed error message when compiling plugins on the default compiler's folder.
+ * Fixed not recognizing all file functions when parsing comments and quotes in chars and strings.
  * Fixed the auto completion not working on non-saved files, i.e., you start writing a new sheet without saving it.
+ * Added a new setting `word_autocomplete` to enable auto completing words from the current file.
+ * Added a new setting `use_all_autocomplete` to use the package `All Autocomplete` to do the completing on the current file.
+ * Added a new setting `function_autocomplete` to enable auto completing functions and global variables from the current file.
 
 v1.2.1 | 2017-01-07
  * Fixed the `register_cvar` not being recognized at some cases on the AmxxPawn.sublime-syntax
