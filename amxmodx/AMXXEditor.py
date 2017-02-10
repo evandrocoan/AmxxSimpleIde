@@ -1128,7 +1128,7 @@ class PawnParse :
 		if self.node.isFromBufferOnly or self.isTheCurrentFile:
 			self.node.funcs.append( (name + '\t - ' + info, autocomplete) )
 		else:
-			self.node.funcs.append( (name + '  \t' +  self.file_name + ' - ' + info, autocomplete) )
+			self.node.funcs.append( (name + ' \t' +  self.file_name + ' - ' + info, autocomplete) )
 
 	#}
 
@@ -1140,7 +1140,7 @@ class PawnParse :
 		if self.node.isFromBufferOnly or self.isTheCurrentFile:
 			self.node.funcs.append( (show_name + '\t - ' + info, autocomplete) )
 		else:
-			self.node.funcs.append( (show_name + '  \t'+  self.file_name + ' - ' + info, autocomplete) )
+			self.node.funcs.append( (show_name + ' \t'+  self.file_name + ' - ' + info, autocomplete) )
 	#}
 
 	def add_word_autocomplete(self, name) :
