@@ -43,9 +43,12 @@ def unload_handler() :
 class NewAmxxIncludeCommand(sublime_plugin.WindowCommand):
 	def run(self):
 		new_file("inc")
+
+
 class NewAmxxPluginCommand(sublime_plugin.WindowCommand):
 	def run(self):
 		new_file("sma")
+
 
 def new_file(type):
 #{
@@ -56,7 +59,12 @@ def new_file(type):
 	plugin_template = plugin_template.replace("\r", "")
 
 	view.run_command("insert_snippet", {"contents": plugin_template})
+	sublime.set_timeout_async( lambda: set_new_file_syntax( view ), 0 )
 #}
+
+def set_new_file_syntax( view ):
+	view.set_syntax_file(g_new_file_syntax)
+
 
 class AboutAmxxEditorCommand(sublime_plugin.WindowCommand):
 #{
@@ -464,7 +472,12 @@ class AMXXEditor(sublime_plugin.EventListener):
 
 					view_words     = view.extract_completions(prefix)
 					view_words     = fix_truncation(view, view_words)
-					view_base_name = os.path.basename( view.file_name() )
+					view_base_name = view.file_name()
+
+					if view_base_name is None:
+						view_base_name = ""
+					else:
+						view_base_name = os.path.basename( view_base_name )
 
 					for word in view_words:
 						# Remove the annoying `(` on the string
@@ -473,7 +486,7 @@ class AMXXEditor(sublime_plugin.EventListener):
 						if word not in words_set:
 							# print_debug( 16, "( all_views_autocomplete ) word: %s" % word )
 							words_set.add( word )
-							words_list.append( ( word + '  \t' + view_base_name, word ) )
+							words_list.append( ( word + ' \t' + view_base_name, word ) )
 
 						if time.time() - start_time > 0.3:
 							# print_debug( 16, "( all_views_autocomplete ) Breaking all views loop after: %f" % time.time() - start_time )
@@ -553,6 +566,7 @@ def on_settings_modified(is_loading=False):
 #{
 	print_debug(4, "on_settings_modified" )
 	global g_enable_inteltip
+	global g_new_file_syntax
 	global g_word_autocomplete
 	global g_function_autocomplete
 	global g_use_all_autocomplete
@@ -593,6 +607,7 @@ def on_settings_modified(is_loading=False):
 	g_word_autocomplete 	= settings.get('word_autocomplete', False)
 	g_use_all_autocomplete 	= settings.get('use_all_autocomplete', False)
 	g_function_autocomplete = settings.get('function_autocomplete', False)
+	g_new_file_syntax       = settings.get('amxx_file_syntax', 'Packages/Amxx Pawn/AmxxPawn.sublime-syntax')
 	g_debug_level 			= settings.get('debug_level', 0)
 	g_delay_time			= settings.get('live_refresh_delay', 1.0)
 	g_include_dir 			= settings.get('include_directory')
@@ -626,7 +641,13 @@ def is_invalid_settings(settings) :
 
 	temp = settings.get('include_directory')
 	if not os.path.isdir(temp) :
-		return "The `include_directory` directory not exist!\n\n\"%s\"\n\nPlease, go to the menu:\n`Amx Mod X -> Configure AMXX-Autocompletion Settings`" % temp
+		return "The `include_directory` directory does not exist!\n\n\"%s\"\n\nPlease, " % temp \
+			+ "go to the menu:\n`Amx Mod X -> Configure AMXX-Autocompletion Settings`"
+
+	temp = sublime.packages_path() + "/../" + settings.get('amxx_file_syntax')
+	if not os.path.isfile(temp) :
+		return "The `amxx_file_syntax` file does not exist!\n\n\"%s\"\n\nPlease, " % temp \
+			+ "go to the menu:\n`Amx Mod X -> Configure AMXX-Autocompletion Settings`"
 
 	return None
 #}
@@ -937,16 +958,22 @@ class PawnParse :
 	#{
 		self.save_const_timer = None
 		self.constants_count  = len(g_constants_list)
-		active_window         = sublime.active_window()
-
-		# print_debug(4, "(save_constants) active_window.folders(): " + str( active_window.folders() ) )
-		# print_debug(4, "(save_constants) active_window.project_file_name(): " + str( active_window.project_file_name() ) )
+		windows               = sublime.windows()
 
 		# If you have a project within 10000 files, each time this is updated, will for sublime to
 		# process again all the files. Therefore only allow this on project with no files to index.
-		if len( active_window.folders() ) > 0:
-			print_debug( 4, "(save_constants) Not saving this time." )
-			return
+		#
+		# If someone is calling this, it means there are some windows with a AMXX file open. Therefore
+		# we do not care to check whether that window has a project or not and there will always be
+		# constants to save.
+		for window in windows:
+			# print_debug(4, "(save_constants) window.id(): " + str( window.id() ) )
+			# print_debug(4, "(save_constants) window.folders(): " + str( window.folders() ) )
+			# print_debug(4, "(save_constants) window.project_file_name(): " + str( window.project_file_name() ) )
+
+			if len( window.folders() ) > 0:
+				print_debug( 4, "(save_constants) Not saving this time." )
+				return
 
 		constants = "___test"
 		for const in g_constants_list :
@@ -1557,6 +1584,7 @@ g_enable_buildversion = False
 g_delay_time = 1.0
 g_include_dir = "."
 g_add_paremeters = False
+g_new_file_syntax = "Packages/Amxx Pawn/AmxxPawn.sublime-syntax"
 g_word_autocomplete = False
 g_use_all_autocomplete = False
 g_function_autocomplete = False
