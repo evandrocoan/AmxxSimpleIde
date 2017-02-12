@@ -26,6 +26,7 @@
     //
     // 0 - Disabled debugging.
     // 1 - Errors messages.
+    //
     "debug_level": 1,
 
     // ( color name ) Set color scheme ( dark / twlight / atomic / white / npp )
