@@ -50,6 +50,10 @@ new const bool:g_dummy_value = false;
                                      // <- source.AmxxPawn
 
 
+new g_dummy_value = false;
+// <- keyword.control.AmxxPawn
+    // <- variable.definition.AmxxPawn
+
 static formated_message[ MAX_BIG_BOSS_STRING ];
 // <- storage.type.vars.AmxxPawn
      // <- storage.type.vars.AmxxPawn
@@ -71,6 +75,53 @@ const formated_message;
                       // <- source.AmxxPawn
                        // <- source.AmxxPawn
 
+stock shit3;
+// <- storage.type.vars.AmxxPawn
+    // <- storage.type.vars.AmxxPawn
+      // <- variable.definition.AmxxPawn
+          // <- variable.definition.AmxxPawn
+
+stock const shit3;
+// <- storage.type.vars.AmxxPawn
+    // <- storage.type.vars.AmxxPawn
+      // <- storage.type.vars.AmxxPawn
+          // <- storage.type.vars.AmxxPawn
+            // <- variable.definition.AmxxPawn
+                // <- variable.definition.AmxxPawn
+
+new stock formated_message;
+// <- keyword.control.AmxxPawn
+  // <- keyword.control.AmxxPawn
+    // <- storage.type.vars.AmxxPawn
+        // <- storage.type.vars.AmxxPawn
+          // <- variable.definition.AmxxPawn
+                         // <- variable.definition.AmxxPawn
+
+new stock g_dummy_value = false;
+// <- keyword.control.AmxxPawn
+    // <- storage.type.vars.AmxxPawn
+          // <- variable.definition.AmxxPawn
+
+new stock const g_dummy_value = false;
+// <- keyword.control.AmxxPawn
+    // <- storage.type.vars.AmxxPawn
+          // <- storage.type.vars.pawn
+                // <- variable.definition.AmxxPawn
+
+new stock const bool:g_dummy_value = false;
+// <- keyword.control.AmxxPawn
+    // <- storage.type.vars.AmxxPawn
+          // <- storage.type.vars.pawn
+                // <- variable.type.AmxxPawn
+                    // <- keyword.operator.AmxxPawn
+                     // <- variable.definition.AmxxPawn
+
+new stock bool:g_dummy_value = false;
+// <- keyword.control.AmxxPawn
+    // <- storage.type.vars.AmxxPawn
+          // <- variable.type.AmxxPawn
+              // <- keyword.operator.AmxxPawn
+               // <- variable.definition.AmxxPawn
 
 stock nominationAttemptWithNamePart( player_id = 5, partialNameAttempt[] )
 // <- storage.type.function.AmxxPawn
@@ -90,6 +141,41 @@ stock nominationAttemptWithNamePart( player_id = 5, partialNameAttempt[] )
                                                                          // <- keyword.brackets.AmxxPawn
                                                                           // <- source.AmxxPawn
 
+public bool:   hi()
+// <- storage.type.function.AmxxPawn
+     // <- storage.type.function.AmxxPawn
+       // <- variable.type.AmxxPawn
+          // <- variable.type.AmxxPawn
+               // <- support.function.definition.pawn entity.name.function.AmxxPawn function.definition.AmxxPawn
+                // <- support.function.definition.pawn entity.name.function.AmxxPawn function.definition.AmxxPawn
+                 // <- keyword.brackets.AmxxPawn
+                  // <- keyword.brackets.AmxxPawn
+
+nominationAttemptWithNamePart( player_id = 5, partialNameAttempt[] )
+// <- support.function.definition.pawn entity.name.function.AmxxPawn function.definition.AmxxPawn
+                            // <- support.function.definition.pawn entity.name.function.AmxxPawn function.definition.AmxxPawn
+
+bool:nominationAttemptWithNamePart( player_id = 5, partialNameAttempt[] )
+// <- variable.type.AmxxPawn
+   // <- variable.type.AmxxPawn
+     // <- support.function.definition.pawn entity.name.function.AmxxPawn function.definition.AmxxPawn
+                                 // <- support.function.definition.pawn entity.name.function.AmxxPawn function.definition.AmxxPawn
+
+public func(){}
+       // <- function.definition.AmxxPawn
+          // <- function.definition.AmxxPawn
+
+stock func(){}
+      // <- function.definition.AmxxPawn
+         // <- function.definition.AmxxPawn
+
+bool:func(){}
+     // <- function.definition.AmxxPawn
+        // <- function.definition.AmxxPawn
+
+punishmet(id, PunishType:type) {}
+// <- function.definition.AmxxPawn
+        // <- function.definition.AmxxPawn
 
 {}
 // <- meta.block.AmxxPawn keyword.brackets.AmxxPawn
@@ -115,19 +201,22 @@ stock nominationAttemptWithNamePart( player_id = 5, partialNameAttempt[] )
 #endif
 
     vformat( formated_message, charsmax( formated_message ), message, 3 );
-//  ^^^^^^^ meta.block.AmxxPawn function.call.AmxxPawn
+    // <- meta.block.AmxxPawn function.call.AmxxPawn
+        // <- meta.block.AmxxPawn function.call.AmxxPawn
 }
 
 
 {
 #define IT_IS_A_VALID_LINE(%1) // this else only works for AMXX 183 or superior, due noted bug above.
     vformat( formated_message, charsmax( formated_message ), message, 3 );
-//  ^^^^^^^ meta.block.AmxxPawn function.call.AmxxPawn
+    // <- meta.block.AmxxPawn function.call.AmxxPawn
+          // <- meta.block.AmxxPawn function.call.AmxxPawn
 
 #define IT_IS_A_VALID_LINE(%1)
 
     LOGGER( 64, "( color_print ) [out] player_id: %d, Chat printed: %s...", player_id, formated_message )
-//  ^^^^^^ meta.block.AmxxPawn function.call.AmxxPawn
+    // <- meta.block.AmxxPawn function.call.AmxxPawn
+         // <- meta.block.AmxxPawn function.call.AmxxPawn
 }
 
 
@@ -137,7 +226,8 @@ stock nominationAttemptWithNamePart( player_id = 5, partialNameAttempt[] )
                                            && !equal( %1, ";", 1 ) \
                                                                      && IS_MAP_VALID( %1 ) )
                                                                                                 stock loadMapFileList()
-//                                                                                              ^^^^^ storage.type.function.AmxxPawn
+//                                                                                              ^     storage.type.function.AmxxPawn
+//                                                                                                  ^ storage.type.function.AmxxPawn
 
 #define IT_IS_A_VALID_LINE(%1) \
     ( %1[ 0 ] \
@@ -276,7 +366,10 @@ new Array:dummy;
 
 
 new bool:g_isPlayerVoted            [ MAX_PLAYERS_COUNT ] = { true , ... };
-//  ^^^^ variable.type.AmxxPawn
+    // <- variable.type.AmxxPawn
+       // <- variable.type.AmxxPawn
+         // <- variable.definition.AmxxPawn
+                       // <- variable.definition.AmxxPawn
 
 stock test_populateListOnSeries( Array:populatedArray, expectedIndexes[]={0}, mapName[], bool:isNotToBe = false  )
 // <- storage.type.function.AmxxPawn
@@ -291,7 +384,7 @@ stock mp_fraglimitCvarSupport()
     else if( get_pcvar_num( cvar_fragLimitSupport ) )
     {
         new bool:g_isPlayerVoted            [ MAX_PLAYERS_COUNT ] = { true , ... };
-        //  ^^^^ meta.block.AmxxPawn meta.block.AmxxPawn variable.type.AmxxPawn
+        //  ^^^^ meta.block.AmxxPawn meta.block.AmxxPawn storage.type.vars.pawn variable.type.AmxxPawn
 
         register_event( "DeathMsg", "client_death_event", "a" );
      // ^^^^^^^^^^^^^^ meta.block.AmxxPawn meta.block.AmxxPawn function.call.AmxxPawn
@@ -324,7 +417,7 @@ public plugin_init()
 
 public plugin_init()
 {
-// meta.block.AmxxPawn keyword.brackets.AmxxPawn
+// <- meta.block.AmxxPawn keyword.brackets.AmxxPawn
 
     register_plugin(PLUGIN, VERSION, AUTHOR)
 //  ^^^^^^^^^^^^^^^ meta.block.AmxxPawn function.call.AmxxPawn
@@ -371,7 +464,8 @@ public plugin_init()
 //                    ^ meta.block.AmxxPawn punctuation.definition.string.end.AmxxPawn
 
 }
-// meta.block.AmxxPawn keyword.brackets.AmxxPawn
+// <- meta.block.AmxxPawn keyword.brackets.AmxxPawn
+
 
 
 
