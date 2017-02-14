@@ -273,6 +273,21 @@ function()
     }
 }
 
+stock loadMapGroupsFeatureFile( const mapFilerFilePath[], const Array:mapFilersPathArray, const Array:maxMapsPerGroupToUse = Var )
+//                              ^^^^^ storage.type.vars.AmxxPawn
+//                                    ^^^^^^^^^^^^^^^^ parameter.definition.AmxxPawn
+//                                                                                        ^^^^^ storage.type.vars.AmxxPawn
+
+stock loadMapGroupsFeatureFile( mapFilerFilePath[], &Array:mapFilersPathArray, &Array:maxMapsPerGroupToUse = Var )
+//                              ^^^^^^^^^^^^^^^^ parameter.definition.AmxxPawn
+//                                                  ^ keyword.operator.bitwise.AmxxPawn
+//                                                        ^ keyword.operator.ternary.AmxxPawn
+//                                                         ^^^^^^^^^^^^^^^^^^ parameter.definition.AmxxPawn
+//                                                                                    ^^^^^^^^^^^^^^^^^^^^ parameter.definition.AmxxPawn
+//                                                                                                           ^^^ source.AmxxPawn source.sma
+{
+}
+
 {}
 // <- meta.block.AmxxPawn keyword.brackets.AmxxPawn
  // <- meta.block.AmxxPawn keyword.brackets.AmxxPawn
