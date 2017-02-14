@@ -176,6 +176,102 @@ bool:func(){}
 punishmet(id, PunishType:type) {}
 // <- function.definition.AmxxPawn
         // <- function.definition.AmxxPawn
+                        // <- keyword.operator.ternary.AmxxPawn
+
+enum (+=100)
+//    ^^ keyword.operator.assignment.AmxxPawn
+//      ^^^ constant.numeric.int.AmxxPawn
+// <- storage.type.vars.AmxxPawn
+   // <- storage.type.vars.AmxxPawn
+     // <- keyword.brackets.AmxxPawn
+           // <- keyword.brackets.AmxxPawn
+{
+    TASK_FIRST_CMD = 106
+//  ^^^^^^^^^^^^^^ variable.definition.AmxxPawn
+//                 ^ keyword.operator.assignment.AmxxPawn
+//                   ^^^ constant.numeric.int.AmxxPawn
+};
+
+enum (+=100)
+{
+    PUNISH_BAD_CLIENT2, PUNISH_WRONG_CMO2
+//  ^^^^^^^^^^^^^^^^^^ variable.definition.AmxxPawn
+//                    ^ keyword.other.AmxxPawn
+//                      ^^^^^^^^^^^^^^^^^ variable.definition.AmxxPawn
+}
+
+enum PunishType3
+// <- storage.type.vars.AmxxPawn
+   // <- storage.type.vars.AmxxPawn
+//   ^^^^^^^^^^^ variable.definition.AmxxPawn
+
+{
+    TASK_FIRST_CMD3 = 106,
+//  ^^^^^^^^^^^^^^^ variable.definition.AmxxPawn
+//                  ^ keyword.operator.assignment.AmxxPawn
+//                    ^^^ constant.numeric.int.AmxxPawn
+//                       ^ keyword.other.AmxxPawn
+    TASK_FIRST_CMD4 = 555
+//  ^^^^^^^^^^^^^^ variable.definition.AmxxPawn
+//                  ^ keyword.operator.assignment.AmxxPawn
+//                    ^^^ constant.numeric.int.AmxxPawn
+};
+ // <- keyword.semicolon.AmxxPawn
+
+enum bool:PunishType5
+// <- storage.type.vars.AmxxPawn
+   // <- storage.type.vars.AmxxPawn
+     // <- variable.type.AmxxPawn
+        // <- variable.type.AmxxPawn
+         // <- keyword.operator.AmxxPawn
+//        ^^^^^^^^^^^ variable.definition.AmxxPawn
+{
+    PUNISH_BAD_CLIENT4, PUNISH_WRONG_CMO4
+}
+
+enum PunishType
+// <- storage.type.vars.AmxxPawn
+   // <- storage.type.vars.AmxxPawn
+//   ^^^^^^^^^^ variable.definition.AmxxPawn
+{
+    PUNISH_BAD_CLIENT3, PUNISH_WRONG_CMO3
+}
+
+enum _:PunishType6
+// <- storage.type.vars.AmxxPawn
+   // <- storage.type.vars.AmxxPawn
+      // <- keyword.operator.AmxxPawn
+     // <- variable.type.AmxxPawn
+//     ^^^^^^^^^^^ variable.definition.AmxxPawn
+{
+    PUNISH_BAD_CLIENT5, PUNISH_WRONG_CMO6
+//  ^^^^^^^^^^^^^^^^^^ variable.definition.AmxxPawn
+//                    ^ keyword.other.AmxxPawn
+//                      ^^^^^^^^^^^^^^^^^ variable.definition.AmxxPawn
+}
+
+/**
+ * Task ids are 100000 apart.
+ */
+enum (+= 100000)
+//    ^^ keyword.operator.assignment.AmxxPawn
+//       ^^^^^^ constant.numeric.int.AmxxPawn
+// <- storage.type.vars.AmxxPawn
+{
+    TASKID_RTV_REMINDER = 100000, // start with 100000
+    TASKID_SHOW_LAST_ROUND_HUD,
+}
+
+function()
+{
+    enum loadMapFilesTypes
+    {
+        t_Whitelist,
+        t_MininumPlayers,
+        t_MiddlePlayers,
+        t_NormalPlayers
+    }
+}
 
 {}
 // <- meta.block.AmxxPawn keyword.brackets.AmxxPawn
@@ -197,6 +293,7 @@ punishmet(id, PunishType:type) {}
 
     vformat( formated_message, charsmax( formated_message ), message, 3 );
 //  ^^^^^^^ meta.block.AmxxPawn function.call.AmxxPawn
+                                                                         // <- keyword.semicolon.AmxxPawn
 
 #endif
 
@@ -313,7 +410,7 @@ punishmet(id, PunishType:type) {}
                                                                      && IS_MAP_VALID( %1 ) )
                                                                                                 stock loadMapFileList()
 // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.AmxxPawn
-
+//                                                                                                     ^^^^^^^^^^^^^^ support.function.definition.pawn entity.name.function.AmxxPawn function.definition.AmxxPawn
 
 #define IS_TO_USE_BLACKLIST_INSTEAD_OF_WHITELIST 01+50 \
 s
@@ -331,7 +428,8 @@ new Array:dummy;
 s
 new Array:dummy;
 // <- keyword.control.AmxxPawn
-
+    // <- storage.type.vars.pawn variable.type.AmxxPawn
+         // <- keyword.operator.AmxxPawn
 
 {
     formatex( debug_level, charsmax( debug_level ), "%d | %d", g_debug_level, DEBUG_LEVEL );
@@ -870,7 +968,11 @@ Manual Tests
 
 
 
+private_function_declaration()
+    call_to_function()
 
+private_function_declaration()
+   { call_to_function() }
 
 
 
