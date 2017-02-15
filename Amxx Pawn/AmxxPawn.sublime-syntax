@@ -354,52 +354,75 @@ contexts:
       push:
         - include: function_definition_parameters
 
-  # Compute the definition function parameters as `( player_id = 5, partialNameAttempt[] )`
+  # Compute the function definition parameters as `( player_id = 5, partialNameAttempt[] )`
   function_definition_parameters:
-    - match: \(
+    # Do not consume this parenthesis, we need it latter to match the parameters definition.
+    - match: '(?=\()'
       scope: punctuation.definition.paren.begin.AmxxPawn keyword.brackets.AmxxPawn
     - match: \)
       scope: punctuation.definition.paren.end.AmxxPawn keyword.brackets.AmxxPawn
       pop: true
 
-    - match: '(const)\s*((\w*)(:))?(\w+)\s*(=)\s*([a-zA-Z_]+)'
+    # Matches: load( const Array: max = Var )
+    # Groups:        1     2    3 4
+    - match: '(const)\s*(\w+)(:)\s*(\w+)'
       captures:
         1: storage.type.vars.AmxxPawn
+        2: storage.type.vars.pawn variable.type.AmxxPawn
+        3: keyword.operator.ternary.AmxxPawn
+        4: parameter.definition.AmxxPawn
+
+    # This had to be slit into one using the &, and other not using the &. Just doing (&)? not worked
+    # anyways. But just &? worked. However we must to add the & to a capture group for scoping it
+    # properly.
+    # Matches: load( & Array: max = Var )
+    # Groups:        1 2    3 4
+    - match: '(?<=\,|\()\s*(&)(\b([\w]+))(:)\s*(\w*)'
+      captures:
+        1: keyword.operator.bitwise.AmxxPawn
         3: storage.type.vars.pawn variable.type.AmxxPawn
         4: keyword.operator.ternary.AmxxPawn
         5: parameter.definition.AmxxPawn
-        6: keyword.operator.assignment.AmxxPawn
 
-    - match: '(const)\s*((\w*)(:))?(\w+)'
-      captures:
-        1: storage.type.vars.AmxxPawn
-        3: storage.type.vars.pawn variable.type.AmxxPawn
-        4: keyword.operator.ternary.AmxxPawn
-        5: parameter.definition.AmxxPawn
-
-    - match: '((\w*)(:))?(\w+)\s*(=)\s*([a-zA-Z_]+)'
+    # Matches: load( Array: max = Var )
+    # Groups:        1    2 3
+    - match: '(?<=\,|\()\s*(\b([\w]+))(:)\s*(\w*)'
       captures:
         2: storage.type.vars.pawn variable.type.AmxxPawn
         3: keyword.operator.ternary.AmxxPawn
         4: parameter.definition.AmxxPawn
-        5: keyword.operator.assignment.AmxxPawn
 
-    - match: '((\w*)(:))(\w+)'
+    # Matches: Part( player_id = 5, partialNameAttempt[] )
+    # Groups:        1              1
+    # Matches: load( const map[], max = Var )
+    # Groups:                     1
+    # Matches: Part( player_id, play )
+    # Groups:        1          1
+    # Matches: Part( player_id )
+    # Groups:        1
+    - match: '(?<=\,|\()\s*(?!const)(\w+)(?!:)'
       captures:
-        2: storage.type.vars.pawn variable.type.AmxxPawn
-        3: keyword.operator.ternary.AmxxPawn
-        4: parameter.definition.AmxxPawn
+        1: parameter.definition.AmxxPawn
+
+    # Matches: File( const mapFilerFilePath[] )
+    # Groups:        1     2
+    - match: '(const)\s*(\w+\b)\s*(?!:)'
+      captures:
+        1: storage.type.vars.AmxxPawn
+        2: parameter.definition.AmxxPawn
 
     # Matches everything else as strings " ", chars, numbers, etc.
     - include: pawn_function_parameters_includes
 
-    # What is remaining is then parameters definitions.
-    - match: '(\w+)'
-      captures:
-        1: parameter.definition.AmxxPawn
-
     - match: ','
       scope: keyword.brackets.pawn punctuation.separator.AmxxPawn
+
+    # As everything else possible is already parsed, tag the parameters default value.
+    # Matches: File( const map[], const Array:maxMapsPerGroupToUse = bool:Var )
+    # Groups:                                                        1
+    - match: '(\w+)(?=:)'
+      captures:
+        1: storage.type.vars.pawn variable.type.AmxxPawn
 
   ########################################################
 
@@ -441,7 +464,7 @@ contexts:
       captures:
         1: storage.type.vars.AmxxPawn
         2: punctuation.definition.paren.begin.AmxxPawn keyword.brackets.AmxxPawn
-        3:  keyword.operator.assignment.AmxxPawn
+        3: keyword.operator.assignment.AmxxPawn
         4: constant.numeric.int.AmxxPawn
         5: punctuation.definition.paren.end.AmxxPawn keyword.brackets.AmxxPawn
       push:
