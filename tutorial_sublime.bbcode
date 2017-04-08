@@ -29,6 +29,7 @@ See:
 [*][url]https://github.com/SublimeTextIssues/Core/issues[/url]
 [/LIST]
 
+
 [SIZE="6"][COLOR="blue"][B]Contents' Table[/B][/COLOR][/SIZE]
 
 [LIST=1]
@@ -59,10 +60,48 @@ There is also the commands:
 
 
 
+[anchor]changelog[/anchor][SIZE="5"][B]Change log[/B][/SIZE] [goanchor=Top]Go to top[/goanchor]
+[html]
+v1.4.3 | 2017-01-17
+ * Fixed functions redefinitions as: `#define message_begin xs__hook_message_begin` being recognized as constants.
 
-[B]Why Sublime Text?[/B]
+v1.4.2 | 2017-01-15
+ * Fixed pawn constants not being highlighted on the default syntax.
 
-Because you can customize anything: Key Bindings, Menus, Snippets, Macros, Completions and more, just about everything in Sublime Text is customizable.
+v1.4.1 | 2017-01-14
+ * Updated the default Amxx Pawn sublime syntax.
+
+v1.4.0 | 2017-01-12
+ * Fixed misspelling blocking new includes from being processed.
+ * Fixed compiler error when try to compile non saved files.
+ * Fixed the some `#if defined` parsing forcing to skip all the source code after them.
+ * Added support to define function parsing.
+
+v1.3.0 | 2017-01-10
+ * Fixed error message when compiling plugins on the default compiler's folder.
+ * Fixed not recognizing all file functions when parsing comments and quotes in chars and strings.
+ * Fixed the auto completion not working on non-saved files, i.e., you start writing a new sheet without saving it.
+ * Added a new setting `word_autocomplete` to enable auto completing words from the current file.
+ * Added a new setting `use_all_autocomplete` to use the package `All Autocomplete` to do the completing on the current file.
+ * Added a new setting `function_autocomplete` to enable auto completing functions and global variables from the current file.
+
+v1.2.1 | 2017-01-07
+ * Fixed the `register_cvar` not being recognized at some cases on the AmxxPawn.sublime-syntax
+
+v1.2.0 | 2017-01-06
+ * Added new setting `add_function_parameters` to enable the parameters addition when autocompleting.
+
+v1.1.1 | 2017-01-06
+ * Moved the amxmodx settings to the user folder.
+
+v1.1.0 | 2017-02-06
+ * Added customs include folder detection and autocompletion.
+ * Improved the Notepad++ Default Stylers Theme.
+
+v1.0.0 | 2017-01-30
+ * Initial release.
+[/html]
+
 
 
 [anchor]Compile[/anchor][B][SIZE="5"]How to compile?[/SIZE][/B] [goanchor=Top]Go to top[/goanchor]
@@ -105,8 +144,6 @@ Because you can customize anything: Key Bindings, Menus, Snippets, Macros, Compl
 
 
 [/LIST]
-[/SPOILER]
-
 
 [B]The Windows Compiler[/B]
 
@@ -152,8 +189,7 @@ Installing the plugin to the folder: F:/SteamLibrary/steamapps/common/Sven Co-op
 
 Took '1.27' seconds to run the script 'D/User/Dropbox/Applications/SoftwareVersioning/SublimeText/Data/Packages/Amxx Pawn/AmxxPawn.sh'.
 [/code]
-
-
+[/SPOILER]
 
 [anchor]What[/anchor][SIZE="5"][B]What more you can do?[/B][/SIZE] [goanchor=Top]Go to top[/goanchor]
 [SPOILER]
@@ -186,6 +222,11 @@ Go to `Preferences -> Browse Packages...` open the folder `Default` and the file
 [/LIST]
 [/SPOILER]
 
+[B]Why Sublime Text?[/B]
+
+Because you can customize anything: Key Bindings, Menus, Snippets, Macros,
+Completions and more, just about everything in Sublime Text is customizable.
+
 [anchor]LatestRelease[/anchor][SIZE="6"][COLOR="Blue"][B]Downloads[/B][/COLOR][/SIZE] [goanchor=Top]Go to top[/goanchor]
 
 [B]What do you need?[/B]
@@ -202,6 +243,6 @@ Go to `Preferences -> Browse Packages...` open the folder `Default` and the file
 [/LIST]
 
 
-[*]The configuration files ([B]Packages.zip[/B]) I created and attached on the `.zip` file at the end of this post, i.e., just below here:
+[*]The configuration files [B]Packages.zip[/B] I created and attached on the `.zip` file at the end of this post, i.e., just below here:
 [/LIST]
 

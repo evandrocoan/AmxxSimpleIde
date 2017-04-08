@@ -73,49 +73,6 @@
 [*]If you do not like to see the message `Update Available` every time you open Sublime Text, you need to buy a Sublime Text Licence for about $70 dollars. Or Update Sublime Text, but as I just said, currently update to version 3126 is not good. May be on the next version the crashing is fixed and you can update.
 [/LIST]
 
-[anchor]changelog[/anchor][SIZE="5"][B]Change log[/B][/SIZE] [goanchor=Top]Go to top[/goanchor]
-[html]
-v1.4.3 | 2017-01-17
- * Fixed functions redefinitions as: `#define message_begin xs__hook_message_begin` being recognized as constants.
-
-v1.4.2 | 2017-01-15
- * Fixed pawn constants not being highlighted on the default syntax.
-
-v1.4.1 | 2017-01-14
- * Updated the default Amxx Pawn sublime syntax.
-
-v1.4.0 | 2017-01-12
- * Fixed misspelling blocking new includes from being processed.
- * Fixed compiler error when try to compile non saved files.
- * Fixed the some `#if defined` parsing forcing to skip all the source code after them.
- * Added support to define function parsing.
-
-v1.3.0 | 2017-01-10
- * Fixed error message when compiling plugins on the default compiler's folder.
- * Fixed not recognizing all file functions when parsing comments and quotes in chars and strings.
- * Fixed the auto completion not working on non-saved files, i.e., you start writing a new sheet without saving it.
- * Added a new setting `word_autocomplete` to enable auto completing words from the current file.
- * Added a new setting `use_all_autocomplete` to use the package `All Autocomplete` to do the completing on the current file.
- * Added a new setting `function_autocomplete` to enable auto completing functions and global variables from the current file.
-
-v1.2.1 | 2017-01-07
- * Fixed the `register_cvar` not being recognized at some cases on the AmxxPawn.sublime-syntax
-
-v1.2.0 | 2017-01-06
- * Added new setting `add_function_parameters` to enable the parameters addition when autocompleting.
-
-v1.1.1 | 2017-01-06
- * Moved the amxmodx settings to the user folder.
-
-v1.1.0 | 2017-02-06
- * Added customs include folder detection and autocompletion.
- * Improved the Notepad++ Default Stylers Theme.
-
-v1.0.0 | 2017-01-30
- * Initial release.
-[/html]
-
-
 [anchor]completion[/anchor][SIZE="5"][B]The auto-completion[/B][/SIZE] [B]by [[URL="https://forums.alliedmods.net/showthread.php?t=284385"]Destro[/URL][/B]], [goanchor=Top]Go to top[/goanchor]
 
 To use the auto-completion you need to configure your include folder going on the menu:
@@ -129,4 +86,5 @@ And setting the path to your compiler's include folder on the `include_directory
 
 [*][img]http://i.imgur.com/qS74dGD.png[/img]
 [/LIST]
+
 
