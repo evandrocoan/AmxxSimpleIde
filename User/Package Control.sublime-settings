@@ -2,14 +2,13 @@
 	"auto_upgrade_ignore":
 	[
 		"Clear Cursors-Carets",
+		"Custom Settings",
+		"Default",
 		"Default Syntax",
+		"Diff",
+		"Fix Main Menus",
 		"Fix Project Switch-Restart Bug",
-		"Fixed Selections Clear",
-		"Configuration Files Syntax",
-		"SQL Keyword Uppercase",
-		"View Settings Freely",
-		"Column Select",
-		"MoveText"
+		"Fixed Selections Clear"
 	],
 	"bootstrapped": true,
 	"debug": false,
@@ -22,8 +21,11 @@
 		"amxmodx",
 		"Amxx Pawn",
 		"BBCode",
+		"Column Select",
+		"MoveText",
 		"Notepad++ Color Scheme",
 		"Package Control",
+		"Project Specific Syntax Settings",
 		"Side-by-Side Settings"
 	],
 	"repositories":
