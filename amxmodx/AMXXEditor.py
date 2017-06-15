@@ -23,13 +23,51 @@ from os.path import basename
 import logging
 
 
+PACKAGE_NAME = "amxmodx"
+
+
 def plugin_loaded() :
 #{
 	settings = sublime.load_settings("amxx.sublime-settings")
 
+	install_build_systens("AmxxPawn.sh")
+	install_build_systens("AmxxPawn.bat")
+
+	install_setting_file("amxx.sublime-settings")
+	install_setting_file("AMXX-Console.sublime-settings")
+
 	on_settings_modified( True );
 	settings.add_on_change('amxx', on_settings_modified)
-	sublime.set_timeout_async(check_update, 2500)
+#}
+
+def install_build_systens(target_file_name):
+#{
+	target_folder     = "Amxx"
+	target_file       = os.path.join( sublime.packages_path(), "User", target_folder, target_file_name )
+	input_file_string = sublime.load_resource( "Packages/%s/%s" % ( PACKAGE_NAME, target_file_name ) )
+
+	target_directory = os.path.join( sublime.packages_path(), "User", target_folder )
+	attempt_to_install_file( target_directory, target_file, input_file_string )
+#}
+
+def install_setting_file( target_file_name ):
+#{
+	target_file       = os.path.join( sublime.packages_path(), "User", target_file_name )
+	input_file_string = sublime.load_resource( "Packages/%s/%s" % ( PACKAGE_NAME, target_file_name ) )
+
+	target_directory = os.path.join( sublime.packages_path(), "User" )
+	attempt_to_install_file( target_directory, target_file, input_file_string )
+#}
+
+def attempt_to_install_file( target_directory, target_file, input_file_string ):
+#{
+	if not os.path.exists( target_directory ):
+		os.makedirs( target_directory )
+
+	if not os.path.exists( target_file ):
+		text_file = open( target_file, "w" )
+		text_file.write( input_file_string )
+		text_file.close()
 #}
 
 def unload_handler() :
@@ -79,50 +117,13 @@ class AboutAmxxEditorCommand(sublime_plugin.WindowCommand):
 
 		about += "- Contributors:\n"
 		about += "   sasske        (white color scheme)\n"
-		about += "   addons_zz (npp color scheme)\n"
+		about += "   addons_zz     (npp color scheme)\n"
 		about += "   KliPPy        (build version)\n"
-		about += "   Mistrick     (mistrick color scheme)\n"
+		about += "   Mistrick      (mistrick color scheme)\n"
+
+		about += "\nhttps://amxmodx-es.com/showthread.php?tid=12316\n"
 
 		sublime.message_dialog(about)
-	#}
-#}
-
-class UpdateAmxxEditorCommand(sublime_plugin.WindowCommand):
-#{
-	def run(self) :
-	#{
-		sublime.set_timeout_async(self.check_update_async, 100)
-	#}
-	def check_update_async(self) :
-	#{
-		check_update(True)
-	#}
-#}
-
-def check_update(bycommand=0) :
-#{
-	data = urllib.request.urlopen("https://amxmodx-es.com/st.php").read().decode("utf-8")
-
-	if data :
-	#{
-		data = data.split("\n", 1)
-
-		fCheckVersion = float(data[0])
-		fCurrentVersion = float(EDITOR_VERSION)
-
-		if fCheckVersion == fCurrentVersion and bycommand :
-			msg = "AMXX: You are using the latest version v"+ EDITOR_VERSION
-			sublime.ok_cancel_dialog(msg, "OK")
-
-		if fCheckVersion > fCurrentVersion :
-		#{
-			msg  = "AMXX: A new version available v"+ data[0]
-			msg += "\n\nNews:\n" + data[1]
-			ok = sublime.ok_cancel_dialog(msg, "Update")
-
-			if ok :
-				webbrowser.open_new_tab("https://amxmodx-es.com/showthread.php?tid=12316")
-		#}
 	#}
 #}
 
@@ -420,7 +421,7 @@ class AMXXEditor(sublime_plugin.EventListener):
 		doctset.update(node.doct)
 
 	def all_views_autocomplete( self, active_view, prefix, locations, g_words_set ):
-		print_debug( 16, "AMXXEditor::all_views_autocomplete(5)" )
+		# print_debug( 16, "AMXXEditor::all_views_autocomplete(5)" )
 		# print_debug( 16, "( all_views_autocomplete ) g_words_set size: %d" % len( g_words_set ) )
 
 		words_set  = g_words_set.copy()
@@ -445,7 +446,7 @@ class AMXXEditor(sublime_plugin.EventListener):
 					words_set.add( word )
 					words_list.append( ( word, word ) )
 
-				if time.time() - start_time > 0.1:
+				if time.time() - start_time > 0.05:
 					break
 
 		# print_debug( 16, "( all_views_autocomplete ) Current views loop took: %f" % ( time.time() - start_time ) )
@@ -608,7 +609,7 @@ def on_settings_modified(is_loading=False):
 	g_word_autocomplete 	= settings.get('word_autocomplete', False)
 	g_use_all_autocomplete 	= settings.get('use_all_autocomplete', False)
 	g_function_autocomplete = settings.get('function_autocomplete', False)
-	g_new_file_syntax       = settings.get('amxx_file_syntax', 'Packages/Amxx Pawn/AmxxPawn.sublime-syntax')
+	g_new_file_syntax       = settings.get('amxx_file_syntax', 'Packages/amxmodx/AMXX-Pawn.sublime-syntax')
 	g_debug_level 			= settings.get('debug_level', 0)
 	g_delay_time			= settings.get('live_refresh_delay', 1.0)
 	g_include_dir 			= settings.get('include_directory')
@@ -623,7 +624,7 @@ def on_settings_modified(is_loading=False):
 	g_color_schemes['list'] = g_default_schemes[:]
 	g_color_schemes['active'] = color_scheme
 
-	for file in os.listdir(sublime.packages_path()+"/") :
+	for file in os.listdir(sublime.packages_path()+"/amxmodx/") :
 	#{
 		if file.endswith("-pawn.tmTheme") :
 			g_color_schemes['list'] += [ file.replace("-pawn.tmTheme", "") ]
@@ -1703,7 +1704,7 @@ def simple_escape(html) :
 	return html.replace('&', '&amp;')
 #}
 
-EDITOR_VERSION = "3.0"
+EDITOR_VERSION = "3.0_zz"
 FUNC_TYPES = [ "Function", "Public", "Stock", "Forward", "Native" ]
 
 g_default_schemes = [ "atomic", "dark", "mistrick", "npp", "twlight", "white" ]

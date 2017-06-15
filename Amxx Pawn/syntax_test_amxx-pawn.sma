@@ -13,8 +13,15 @@
  // <- comment.block.AmxxPawn punctuation.definition.comment.AmxxPawn
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 /// Variables
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 
 new const PLUGIN_AUTHOR[]    = "Brad Jones/Addons zz";
@@ -163,8 +170,16 @@ new stock bool:g_dummy_value = false;
 //                             ^^^^^ keyword.control.AmxxPawn
 //                                  ^^ source.AmxxPawn
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
 /// Enumerations
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 
 enum (+=100)
@@ -277,8 +292,14 @@ function()
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 /// Functions definition
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 
 stock test_populateListOnSeries( Array:populatedArray, expectedIndexes[]={0}, mapName[], bool:isNotToBe = false  )
@@ -432,8 +453,14 @@ bool:func(){}
   // <- source.AmxxPawn
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 /// Preprocessor
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 
     #else // this else only works for AMXX 183 or superior, due noted bug above
@@ -577,6 +604,99 @@ new Array:dummy;
 //      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.AmxxPawn
 
 
+#define IS_COLORED_CHAT_ENABLED() \
+    ( is_running( "czero")|| is_running( "cstrike") )
+//                       ^ -string.quoted.double.AmxxPawn
+//                                        ^ string.quoted.double.AmxxPawn
+//                                                ^ -string.quoted.double.AmxxPawn
+stock func()
+{
+    if( IS_COLORED_CHAT_ENABLED() &&
+      is_running( "czero" ) || is_running( "cstrike" ) )
+//                       ^ - string.quoted.double.AmxxPawn
+//                                          ^ string.quoted.double.AmxxPawn
+//                                                  ^ - string.quoted.double.AmxxPawn
+    {
+    }
+
+    #define IS_COLORED_CHAT_ENABLED() \
+    is_running( "czero" ) || is_running( "cstrike"
+}
+
+#define DEBUG_LEVEL 2+64 // commentary
+//                  ^ meta.preprocessor.AmxxPawn constant.numeric.AmxxPawn
+//                    ^^ meta.preprocessor.AmxxPawn constant.numeric.AmxxPawn
+//                       ^^ meta.preprocessor.AmxxPawn punctuation.definition.comment.AmxxPawn comment.line.double-slash.AmxxPawn
+//                         ^^ meta.preprocessor.AmxxPawn comment.line.double-slash.AmxxPawn
+
+#define DEBUG_LEVEL "text" // commentary
+//                  ^ meta.preprocessor.AmxxPawn string.quoted.double.AmxxPawn punctuation.definition.string.begin.AmxxPawn
+//                   ^ meta.preprocessor.AmxxPawn
+//                    ^^^^ meta.preprocessor.AmxxPawn string.quoted.double.AmxxPawn
+//                       ^ meta.preprocessor.AmxxPawn string.quoted.double.AmxxPawn punctuation.definition.string.end.AmxxPawn
+//                         ^^ meta.preprocessor.AmxxPawn punctuation.definition.comment.AmxxPawn comment.line.double-slash.AmxxPawn
+//                           ^^ meta.preprocessor.AmxxPawn comment.line.double-slash.AmxxPawn
+
+#define DEBUG_LEVEL 2+64 /// commentary
+//                  ^ meta.preprocessor.AmxxPawn constant.numeric.AmxxPawn
+//                    ^^ meta.preprocessor.AmxxPawn constant.numeric.AmxxPawn
+//                       ^^ meta.preprocessor.AmxxPawn punctuation.definition.doccomment.AmxxPawn comment.line.triple-slash.AmxxPawn
+//                         ^^ meta.preprocessor.AmxxPawn comment.line.triple-slash.AmxxPawn
+
+#define DEBUG_LEVEL "text" /// commentary
+//                  ^ meta.preprocessor.AmxxPawn string.quoted.double.AmxxPawn punctuation.definition.string.begin.AmxxPawn
+//                   ^^^^ meta.preprocessor.AmxxPawn string.quoted.double.AmxxPawn
+//                       ^ meta.preprocessor.AmxxPawn string.quoted.double.AmxxPawn punctuation.definition.string.end.AmxxPawn
+//                         ^^^ meta.preprocessor.AmxxPawn punctuation.definition.doccomment.AmxxPawn comment.line.triple-slash.AmxxPawn
+//                            ^^ meta.preprocessor.AmxxPawn comment.line.triple-slash.AmxxPawn
+
+#define DEBUG_LEVEL 'd' // commentary
+//                  ^ source.AmxxPawn source.sma meta.preprocessor.AmxxPawn string.quoted.single.AmxxPawn
+//                   ^ meta.preprocessor.AmxxPawn string.quoted.single.AmxxPawn
+//                    ^ meta.preprocessor.AmxxPawn string.quoted.single.AmxxPawn
+//                      ^^ meta.preprocessor.AmxxPawn punctuation.definition.comment.AmxxPawn comment.line.double-slash.AmxxPawn
+//                        ^^ meta.preprocessor.AmxxPawn comment.line.double-slash.AmxxPawn
+
+#define DEBUG_LEVEL 'd' /// commentary
+//                  ^ source.AmxxPawn source.sma meta.preprocessor.AmxxPawn string.quoted.single.AmxxPawn
+//                   ^ meta.preprocessor.AmxxPawn string.quoted.single.AmxxPawn
+//                    ^ meta.preprocessor.AmxxPawn string.quoted.single.AmxxPawn
+//                      ^^^ meta.preprocessor.AmxxPawn punctuation.definition.doccomment.AmxxPawn comment.line.triple-slash.AmxxPawn
+//                         ^^ meta.preprocessor.AmxxPawn comment.line.triple-slash.AmxxPawn
+
+#define DEBUG_LEVEL 'd'
+//                  ^ source.AmxxPawn source.sma meta.preprocessor.AmxxPawn string.quoted.single.AmxxPawn
+//                   ^ meta.preprocessor.AmxxPawn string.quoted.single.AmxxPawn
+//                    ^ meta.preprocessor.AmxxPawn string.quoted.single.AmxxPawn
+
+#define DEBUG_LEVEL2 //
+//                 ^ meta.preprocessor.AmxxPawn - constant.numeric.AmxxPawn
+
+#define DEBUG_LEVEL 2
+//                  ^ meta.preprocessor.AmxxPawn constant.numeric.AmxxPawn
+
+#define CHAT(%1) %1
+new g_user_msgid
+// <- keyword.control.AmxxPawn
+//  ^ variable.definition.AmxxPawn
+
+#define LOG(%1) /**/
+public plugin_init()
+// ^ storage.type.function.AmxxPawn - meta.preprocessor.AmxxPawn - comment.pawn doccomment.block.AmxxPawn
+
+#define LOG(%1) /**/
+//                 ^ meta.preprocessor.AmxxPawn punctuation.definition.comment.AmxxPawn comment.pawn doccomment.block.AmxxPawn
+
+#define LOG(%1) /* */
+//                  ^ meta.preprocessor.AmxxPawn comment.block.AmxxPawn punctuation.definition.comment.AmxxPawn
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Functions calls
 ///
@@ -659,13 +779,13 @@ public plugin_init()
 {
 // <- meta.block.AmxxPawn keyword.brackets.AmxxPawn
 
-    register_plugin(PLUGIN, VERSION, AUTHOR)
+    register_plugin(CS_TEAM_T, CS_TEAM_T, CS_TEAM_T)
 //  ^^^^^^^^^^^^^^^ meta.block.AmxxPawn function.call.AmxxPawn
-//                  ^^^^^^ constant.vars.pawn
-//                        ^ keyword.brackets.pawn punctuation.separator.AmxxPawn
-//                          ^^^^^^^ constant.vars.pawn
-//                                 ^ keyword.brackets.pawn punctuation.separator.AmxxPawn
-//                                   ^^^^^^ constant.vars.pawn
+//                  ^^^^^^^^^ constant.vars.pawn
+//                           ^ keyword.brackets.pawn punctuation.separator.AmxxPawn
+//                             ^^^^^^^^^ constant.vars.pawn
+//                                      ^ keyword.brackets.pawn punctuation.separator.AmxxPawn
+//                                        ^^^^^^^^^ constant.vars.pawn
 
     register_cvar()
 //  ^^^^^^^^^^^^^ meta.block.AmxxPawn function.call.AmxxPawn
@@ -699,6 +819,41 @@ public plugin_init()
 //                       ^ meta.block.AmxxPawn keyword.brackets.AmxxPawn
 }
 // <- meta.block.AmxxPawn keyword.brackets.AmxxPawn
+
+
+g_isTheLastGameRound = bool:roundEndStatus[ SaveRoundEnding_LastRound ];
+//                     ^^^^ source.AmxxPawn source.sma variable.type.AmxxPawn
+//                         ^ source.AmxxPawn source.sma keyword.operator.AmxxPawn
+stock test()
+{
+    g_isTheLastGameRound = bool:roundEndStatus[ SaveRoundEnding_LastRound ];
+//                         ^^^^ source.AmxxPawn source.sma meta.block.AmxxPawn variable.type.AmxxPawn
+//                             ^ source.AmxxPawn source.sma keyword.operator.AmxxPawn
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -66,6 +66,10 @@ contexts:
     # need to quote the regex. If your regex includes the characters #, :, -, {, [ or > then you
     # likely need to quote it. Regexes are only ever run against a single line of text at a time.
     # The match key is a regex, using the Ruby syntax.
+    - match: '/\*\*\/'
+      scope: punctuation.definition.comment.AmxxPawn comment.pawn doccomment.block.AmxxPawn
+
+    # Handles documentation comments
     - match: '/\*\*'
       # The scope assigned to the matched text.
       scope: punctuation.definition.comment.AmxxPawn
@@ -75,23 +79,29 @@ contexts:
         # This assigns the given scope to all text within this context, including the
         # patterns that push the context onto the stack and pop it off.
         - meta_scope: comment.pawn doccomment.block.AmxxPawn
-        - match: '\*/'
+        - match: '\*\/'
           scope: punctuation.definition.comment.AmxxPawn
           # Pops the current context off the stack. The only accepted value for this key is true.
           pop: true
 
+    # Add comments as `/*/` as errors
+    - match: '/\*\/'
+      scope: invalid.illegal.stray-comment-end.AmxxPawn
+
+    # Handles common comments
     - match: '/\*'
       scope: punctuation.definition.comment.AmxxPawn
-
       push:
         - meta_scope: comment.block.AmxxPawn
-        - match: '\*/'
+        - match: '\*\/'
           scope: punctuation.definition.comment.AmxxPawn
           pop: true
 
-    - match: '\*/'
+    # Handles unclosed comments
+    - match: '\*\/'
       scope: invalid.illegal.stray-comment-end.AmxxPawn
 
+    # Triple slashes
     - match: '\/\/\/'
       scope: punctuation.definition.doccomment.AmxxPawn
       push:
@@ -99,6 +109,7 @@ contexts:
         - match: '\n'
           pop: true
 
+    # Double slashes
     - match: '\/\/'
       scope: punctuation.definition.comment.AmxxPawn
       push:
@@ -119,35 +130,7 @@ contexts:
     - include: preprocessor_others
 
   preprocessor_define:
-    # Handle preprocessor declaration ending a `words_pawn` only
-    - match: '^\s*\#(define\s+(\w+))\n'
-      # A mapping of numbers to scope, assigning scopes to captured portions of the match regex.
-      captures:
-        0: meta.preprocessor.AmxxPawn
-        2: support.function.definition.pawn function.definition.AmxxPawn
-
-    # Handle preprocessor declaration ending a triple slash commentary ///
-    - match: '^\s*\#(define\s+(\w+)).*(///)(.*)\n'
-      captures:
-        0: meta.preprocessor.AmxxPawn
-        2: support.function.definition.pawn function.definition.AmxxPawn
-        3: punctuation.definition.doccomment.AmxxPawn comment.line.triple-slash.AmxxPawn
-        4: comment.line.triple-slash.AmxxPawn
-
-    # Handle preprocessor declaration ending a double slash commentary //
-    - match: '^\s*\#(define\s+(\w+)).*(//)(.*)\n'
-      captures:
-        0: meta.preprocessor.AmxxPawn
-        2: support.function.definition.pawn function.definition.AmxxPawn
-        3: punctuation.definition.comment.AmxxPawn comment.line.double-slash.AmxxPawn
-        4: comment.line.double-slash.AmxxPawn
-
-    # Handle preprocessor declaration ending with double quotes "
-    - match: '^\s*\#(define\s+(\w+)).*(".*")\n'
-      captures:
-        0: meta.preprocessor.AmxxPawn
-        2: support.function.definition.pawn function.definition.AmxxPawn
-        3: string.quoted.double.AmxxPawn
+    - include: preprocessor_initial
 
     # Handle all the remaining preprocessor declarations
     - match: '^\s*\#(define\s+(\w+))'
@@ -156,18 +139,76 @@ contexts:
       push:
         - meta_scope: meta.preprocessor.AmxxPawn
         - include: preprocessor_string
-        - include: pawn_comment
+        - include: preprocessor_comment
         - include: preprocessor_numbers
+
+  preprocessor_initial:
+    # Handle preprocessor declaration ending a `words_pawn` only
+    - match: '^\s*\#(define\s+(\w+))\n'
+      # A mapping of numbers to scope, assigning scopes to captured portions of the match regex.
+      captures:
+        0: meta.preprocessor.AmxxPawn
+        2: support.function.definition.pawn function.definition.AmxxPawn
+
+    # Handle preprocessor declaration ending a triple slash commentary ///
+    - match: '(?=^\s*\#(define\s+(\w+)).*(///)(.*)\n)'
+      captures:
+        0: meta.preprocessor.AmxxPawn
+        2: support.function.definition.pawn function.definition.AmxxPawn
+        3: punctuation.definition.doccomment.AmxxPawn comment.line.triple-slash.AmxxPawn
+        4: comment.line.triple-slash.AmxxPawn
+      push:
+        - meta_scope: meta.preprocessor.AmxxPawn
+        - include: pawn_string
+        - include: preprocessor_numbers
+        - match: '(///)(.*)\n'
+          captures:
+            1: punctuation.definition.doccomment.AmxxPawn comment.line.triple-slash.AmxxPawn
+            2: comment.line.triple-slash.AmxxPawn
+          pop: true
+
+    # Handle preprocessor declaration ending a double slash commentary //
+    - match: '(?=^\s*\#(define\s+(\w+)).*(//)(.*)\n)'
+      captures:
+        0: meta.preprocessor.AmxxPawn
+        2: support.function.definition.pawn function.definition.AmxxPawn
+        3: punctuation.definition.comment.AmxxPawn comment.line.double-slash.AmxxPawn
+        4: comment.line.double-slash.AmxxPawn
+      push:
+        - meta_scope: meta.preprocessor.AmxxPawn
+        - include: pawn_string
+        - include: preprocessor_numbers
+        - match: '(//)(.*)\n'
+          captures:
+            1: punctuation.definition.comment.AmxxPawn comment.line.double-slash.AmxxPawn
+            2: comment.line.double-slash.AmxxPawn
+          pop: true
+
+    # Handle preprocessor declaration ending with double quotes "
+    - match: ^\s*\#(define\s+(\w+)).*(".*")\n
+      captures:
+        0: meta.preprocessor.AmxxPawn
+        2: support.function.definition.pawn function.definition.AmxxPawn
+        3: string.quoted.double.AmxxPawn
+
+    # Handle preprocessor declaration ending with single quotes '
+    - match: ^\s*\#(define\s+(\w+)).*(\'.*\')\n
+      captures:
+        0: meta.preprocessor.AmxxPawn
+        2: support.function.definition.pawn function.definition.AmxxPawn
+        3: string.quoted.single.AmxxPawn
 
   # Here are not multiline strings support due we cannot handle strings ending with double quotes "
   # and lines ending with strings will not be highlighted.
   preprocessor_string:
-    - match: '(").*("[^\n])'
+    - match: '(").*?(")(?=[^\n])'
       captures:
         0: string.quoted.double.AmxxPawn
         1: punctuation.definition.string.begin.AmxxPawn
         2: punctuation.definition.string.end.AmxxPawn
 
+  # These cases should be already processed by the other rules before it as the double and triple
+  # slash
   preprocessor_others:
     - match: '^(\s*\#.*)(///)(.*)'
       captures:
@@ -187,12 +228,18 @@ contexts:
       push:
         - meta_scope: meta.preprocessor.AmxxPawn
         - include: pawn_string
-        - include: pawn_comment
+        - include: preprocessor_comment
         - include: preprocessor_numbers
         - match: '[^\\\n]$'
           pop: true
 
   preprocessor_numbers:
+
+    # For lines ending with argument digits
+    - match: '%\d\n'
+      scope: constant.numeric.AmxxPawn
+      pop: true
+
     - match: '%\d'
       scope: constant.numeric.AmxxPawn
 
@@ -201,9 +248,18 @@ contexts:
       scope: constant.numeric.AmxxPawn
       pop: true
 
-    # For the digits anywhere on the line, except its end
-    - match: '\d'
+    - match: '\b\d\b'
       scope: constant.numeric.AmxxPawn
+
+    # For the digits anywhere on the line, except its end
+    - match: (?=\b)\d
+      scope: constant.numeric.AmxxPawn
+      push:
+        - meta_scope: constant.numeric.AmxxPawn
+        - match: \d[^\d]
+          pop: true
+        - match: \n
+          pop: true
 
     # For \ signs on the line's middle
     - match: '\\.+'
@@ -213,6 +269,66 @@ contexts:
     - match: '[^\\]\n'
       pop: true
 
+  preprocessor_comment:
+
+    # The regex used to match against the text. YAML allows many strings to be written without
+    # quotes, which can help make the regex clearer, but it's important to understand when you
+    # need to quote the regex. If your regex includes the characters #, :, -, {, [ or > then you
+    # likely need to quote it. Regexes are only ever run against a single line of text at a time.
+    # The match key is a regex, using the Ruby syntax.
+    - match: '/\*\*\/'
+      scope: punctuation.definition.comment.AmxxPawn comment.pawn doccomment.block.AmxxPawn
+      # Pops the current context off the stack. The only accepted value for this key is true.
+      pop: true
+
+    # Handles documentation comments
+    - match: '/\*\*'
+      # The scope assigned to the matched text.
+      scope: punctuation.definition.comment.AmxxPawn
+      # The contexts to push onto the stack. This may be either a single context name, a list
+      # of context names, or an inline, anonymous context.
+      push:
+        # This assigns the given scope to all text within this context, including the
+        # patterns that push the context onto the stack and pop it off.
+        - meta_scope: comment.pawn doccomment.block.AmxxPawn
+
+        # Pops contexts of the stack using do not consuming the actually characters
+        # https://forum.sublimetext.com/t/sublime-syntax-pop-multiple-levels/15608
+        - match: '(?=\*\/)'
+          scope: punctuation.definition.comment.AmxxPawn
+          pop: true
+
+    # Handles common comments
+    - match: '\/\*'
+      scope: punctuation.definition.comment.AmxxPawn
+      push:
+        - meta_scope: comment.block.AmxxPawn
+        - match: '(?=\*\/)'
+          scope: punctuation.definition.comment.AmxxPawn
+          pop: true
+
+    # Pops contexts of the stack using do not consuming the actually characters
+    # https://forum.sublimetext.com/t/sublime-syntax-pop-multiple-levels/15608
+    - match: '\*\/'
+      scope: comment.block.AmxxPawn punctuation.definition.comment.AmxxPawn
+      pop: true
+
+    # Triple slashes
+    - match: '\/\/\/'
+      scope: punctuation.definition.doccomment.AmxxPawn
+      push:
+        - meta_scope: comment.line.triple-slash.AmxxPawn
+        - match: '\n'
+          pop: true
+
+    # Double slashes
+    - match: '\/\/'
+      scope: punctuation.definition.comment.AmxxPawn
+      push:
+        - meta_scope: comment.line.double-slash.AmxxPawn
+        - match: '\n'
+          pop: true
+
   ########################################################
 
 
@@ -220,6 +336,7 @@ contexts:
   # "PAWN String"
   pawn_string:
     - include: pawn_cvars
+    - include: pawn_character
     - match: '"'
       scope: punctuation.definition.string.begin.AmxxPawn
       push:
@@ -555,7 +672,7 @@ contexts:
       captures:
         1: keyword.control.AmxxPawn
         2: storage.type.vars.AmxxPawn
-        3: storage.type.vars.pawn
+        3: storage.type.vars.pawn storage.type.vars.AmxxPawn
         5: storage.type.vars.pawn variable.type.AmxxPawn
         6: keyword.operator.AmxxPawn
         7: variable.definition.AmxxPawn
@@ -661,6 +778,11 @@ contexts:
 
     - match: ';'
       scope: keyword.semicolon.AmxxPawn
+
+    - match: '(Float|enum|char|const|static|Array|bool|Trie)(:)'
+      captures:
+        1: variable.type.AmxxPawn
+        2: keyword.operator.AmxxPawn
 
     - match: '(\?|:)'
       scope: keyword.operator.ternary.AmxxPawn
