@@ -1,0 +1,52 @@
+[
+	{
+		"caption": "Preferences",
+		"mnemonic": "n",
+		"id": "preferences",
+		"children":
+		[
+			{
+				"caption": "Package Settings",
+				"mnemonic": "P",
+				"id": "package-settings",
+				"children":
+				[
+					{
+						"caption": "Side-by-Side Settings",
+						"children":
+						[
+							{
+								"command": "open_file",
+								"caption": "Settings - Default",
+								"args": { "file": "${packages}/Side-by-Side Settings/sxs_settings.sublime-settings" }
+							},
+							{
+								"command": "open_file",
+								"caption": "Settings - User",
+								"args": { "file": "${packages}/User/sxs_settings.sublime-settings", "contents": "{\n\t$0\n}\n" }
+							},
+							{
+								"command": "open_file",
+								"caption": "Key Bindings - Default",
+								"args": { "file": "${packages}/Side-by-Side Settings/Default.sublime-keymap" }
+							},
+							{
+								"caption": "-"
+							},
+							{
+								"command": "open_file",
+								"caption": "Post-Install Readme",
+								"args": { "file": "${packages}/Side-by-Side Settings/messages/post_install_readme.txt" }
+							},
+							{
+								"command": "open_file",
+								"caption": "Change Log",
+								"args": { "file": "${packages}/Side-by-Side Settings/CHANGELOG.md" }
+							}
+						]
+					}
+				]
+			}
+		]
+	}
+]

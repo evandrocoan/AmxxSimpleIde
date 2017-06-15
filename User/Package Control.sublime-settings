@@ -25,6 +25,7 @@
 		"Fixed Selections Clear",
 		"Force Rewrite Sublime Settings",
 		"Select All Spelling Errors",
+		"Side-by-Side Settings",
 		"Configuration Files Syntax",
 		"SQL Keyword Uppercase",
 		"View Settings Freely",
@@ -33,12 +34,14 @@
 	],
 	"bootstrapped": true,
 	"debug": false,
+	"ignore_vcs_packages": true,
 	"in_process_packages":
 	[
 	],
 	"installed_packages":
 	[
 		"Amxx Pawn",
+		"Notepad++ Color Scheme",
 		"Package Control",
-	]
+	],
 }
