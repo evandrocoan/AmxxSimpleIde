@@ -1,7 +1,6 @@
 {
 	"auto_upgrade_ignore":
 	[
-		"amxmodx",
 		"ANSIescape",
 		"BBCode",
 		"Boxy Theme",
@@ -40,6 +39,7 @@
 	],
 	"installed_packages":
 	[
+		"amxmodx",
 		"Amxx Pawn",
 		"Notepad++ Color Scheme",
 		"Package Control",
