@@ -1,24 +1,10 @@
 {
 	"auto_upgrade_ignore":
 	[
-		"Preferences Editor",
-		"Side-by-Side Settings",
-		"SideBarEnhancements",
-		"SublimeCodeIntel",
-		"SublimeREPL",
-		"SyncedSideBar",
-		"Theme - Soda",
-		"Theme - SoDaReloaded",
-		"Toolbar",
-		"Markdown to BB Code Converter",
 		"Clear Cursors-Carets",
-		"Clipboard Scope Copy",
 		"Default Syntax",
 		"Fix Project Switch-Restart Bug",
 		"Fixed Selections Clear",
-		"Force Rewrite Sublime Settings",
-		"Select All Spelling Errors",
-		"Side-by-Side Settings",
 		"Configuration Files Syntax",
 		"SQL Keyword Uppercase",
 		"View Settings Freely",
@@ -37,7 +23,8 @@
 		"Amxx Pawn",
 		"BBCode",
 		"Notepad++ Color Scheme",
-		"Package Control"
+		"Package Control",
+		"Side-by-Side Settings"
 	],
 	"repositories":
 	[
