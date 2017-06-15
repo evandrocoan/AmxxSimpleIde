@@ -2,7 +2,6 @@
 	"auto_upgrade_ignore":
 	[
 		"amxmodx",
-		"Amxx Pawn",
 		"ANSIescape",
 		"BBCode",
 		"Boxy Theme",
@@ -39,6 +38,7 @@
 	],
 	"installed_packages":
 	[
-		"Package Control"
+		"Amxx Pawn",
+		"Package Control",
 	]
 }
