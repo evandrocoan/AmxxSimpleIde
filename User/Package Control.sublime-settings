@@ -1,11 +1,6 @@
 {
 	"auto_upgrade_ignore":
 	[
-		"ANSIescape",
-		"Boxy Theme",
-		"BufferScroll",
-		"Notepad++ Theme",
-		"Package Control",
 		"Preferences Editor",
 		"Side-by-Side Settings",
 		"SideBarEnhancements",
@@ -46,6 +41,7 @@
 	],
 	"repositories":
 	[
-		"https://github.com/evandrocoan/BBCode"
+		"https://github.com/evandrocoan/BBCode",
+		"https://github.com/evandrocoan/package_control"
 	]
 }
