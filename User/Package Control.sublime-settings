@@ -2,7 +2,6 @@
 	"auto_upgrade_ignore":
 	[
 		"ANSIescape",
-		"BBCode",
 		"Boxy Theme",
 		"BufferScroll",
 		"Notepad++ Theme",
@@ -33,7 +32,7 @@
 	],
 	"bootstrapped": true,
 	"debug": false,
-	"ignore_vcs_packages": true,
+	"ignore_vcs_packages": false,
 	"in_process_packages":
 	[
 	],
@@ -41,7 +40,12 @@
 	[
 		"amxmodx",
 		"Amxx Pawn",
+		"BBCode",
 		"Notepad++ Color Scheme",
-		"Package Control",
+		"Package Control"
 	],
+	"repositories":
+	[
+		"https://github.com/evandrocoan/BBCode"
+	]
 }
