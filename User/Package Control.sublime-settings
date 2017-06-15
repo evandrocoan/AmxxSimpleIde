@@ -25,12 +25,14 @@
 		"MoveText",
 		"Notepad++ Color Scheme",
 		"Package Control",
+		"PowerCursors",
 		"Project Specific Syntax Settings",
 		"Side-by-Side Settings"
 	],
 	"repositories":
 	[
 		"https://github.com/evandrocoan/BBCode",
-		"https://github.com/evandrocoan/package_control"
+		"https://github.com/evandrocoan/package_control",
+		"https://github.com/evandrocoan/PowerCursors"
 	]
 }
