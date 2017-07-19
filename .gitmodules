@@ -1,0 +1,9 @@
+[submodule "Package Control"]
+	path = Package Control
+	url = https://github.com/evandrocoan/package_control
+[submodule "Side-by-Side Settings"]
+	path = Side-by-Side Settings
+	url = https://github.com/evandrocoan/sxs-settings
+[submodule "PowerCursors"]
+	path = PowerCursors
+	url = https://github.com/evandrocoan/PowerCursors
