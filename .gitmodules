@@ -7,3 +7,9 @@
 [submodule "PowerCursors"]
 	path = PowerCursors
 	url = https://github.com/evandrocoan/PowerCursors
+[submodule "AmxxPawn"]
+	path = Amxx Pawn
+	url = https://github.com/evandrocoan/SublimeAmxxPawn
+[submodule "amxmodx"]
+	path = amxmodx
+	url = https://github.com/evandrocoan/SublimeAMXX_Editor
