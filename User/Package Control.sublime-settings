@@ -12,7 +12,7 @@
 	],
 	"bootstrapped": true,
 	"debug": false,
-	"ignore_vcs_packages": false,
+	"ignore_vcs_packages": true,
 	"in_process_packages":
 	[
 	],

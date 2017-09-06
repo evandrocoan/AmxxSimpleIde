@@ -1,0 +1,19 @@
+{
+    "folders":
+    [
+        // https://forum.sublimetext.com/t/how-include-a-file-from-a-excluded-folder-in-my-sublime-project/30339
+        // { "path": ".", },
+        {
+            "path": ".",
+            "file_include_patterns":
+            [
+            ],
+            "folder_exclude_patterns":
+            [
+            ],
+            "file_exclude_patterns":
+            [
+            ],
+        },
+    ]
+}
