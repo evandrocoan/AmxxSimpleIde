@@ -1,2 +1,11 @@
 /sublime_text.exe.lnk
 *.sublime-workspace
+
+/.sublime/
+/Backup/
+/Cache/
+/Index/
+/KEEPME
+/Local/
+/Settings/
+/Installed Packages/
