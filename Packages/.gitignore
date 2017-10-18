@@ -1,0 +1,52 @@
+
+
+
+# Ignore Everything
+# *
+# **
+
+
+
+# Ignore other custom packages
+ActiveViewJumpBack
+amxmodx
+AmxxChannel
+AmxxPawn
+ClearCursorsCarets
+Default
+DefaultSyntax
+Diff
+FixedSelectionsClear
+FixProjectSwitchRestartBug
+MoveText
+Notepad++ Color Scheme'
+PackagesManager
+PowerCursors
+PythonDebugTools
+Side-by-Side Settings'
+User
+
+
+
+# Packages dependencies
+coverage/*
+Pyyaml/*
+pyyaml/*
+Pyv8/*
+python-markdown/*
+python-jinja2/*
+pygments/*
+mdpopups/*
+markupsafe/*
+bz2/*
+backrefs/*
+ssl-linux/*
+zzz A File Icon zzz/*
+
+regex/*
+package_setting_context/*
+
+*/linux32-p3/*
+**/linux32-p3/**
+
+
