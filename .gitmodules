@@ -1,15 +1,42 @@
-[submodule "Package Control"]
-	path = Package Control
-	url = https://github.com/evandrocoan/package_control
 [submodule "Side-by-Side Settings"]
-	path = Side-by-Side Settings
+	path = Packages/Side-by-Side Settings
 	url = https://github.com/evandrocoan/sxs-settings
 [submodule "PowerCursors"]
-	path = PowerCursors
+	path = Packages/PowerCursors
 	url = https://github.com/evandrocoan/PowerCursors
 [submodule "AmxxPawn"]
-	path = Amxx Pawn
+	path = Packages/AmxxPawn
 	url = https://github.com/evandrocoan/SublimeAmxxPawn
 [submodule "amxmodx"]
-	path = amxmodx
+	path = Packages/amxmodx
 	url = https://github.com/evandrocoan/SublimeAMXX_Editor
+[submodule "Packages/PackagesManager"]
+	path = Packages/PackagesManager
+	url = https://github.com/evandrocoan/package_control
+[submodule "Packages/Clear Cursors Carets"]
+	path = Packages/ClearCursorsCarets
+	url = https://github.com/evandrocoan/ClearCursorsCarets
+[submodule "Packages/AmxxChannel"]
+	path = Packages/AmxxChannel
+	url = https://github.com/evandrocoan/AmxxChannel
+[submodule "Packages/Active View Jump Back"]
+	path = Packages/ActiveViewJumpBack
+	url = https://github.com/evandrocoan/SublimeActiveViewJumpBack
+[submodule "Packages/Fix Project Switch Restart Bug"]
+	path = Packages/FixProjectSwitchRestartBug
+	url = https://github.com/evandrocoan/SublimeFixProjectSwitchRestartBug
+[submodule "Packages/FixedSelectionsClear"]
+	path = Packages/FixedSelectionsClear
+	url = https://github.com/evandrocoan/SublimeFixedSelectionsClear
+[submodule "Packages/DefaultSyntax"]
+	path = Packages/DefaultSyntax
+	url = https://github.com/evandrocoan/SublimeDefaultSyntax
+[submodule "Packages/MoveText"]
+	path = Packages/MoveText
+	url = https://github.com/evandrocoan/SublimeMoveText
+[submodule "Packages/Notepad++ Color Scheme"]
+	path = Packages/Notepad++ Color Scheme
+	url = https://github.com/evandrocoan/SublimeNotepadPlusPlusTheme
+[submodule "Packages/Default"]
+	path = Packages/Default
+	url = https://github.com/evandrocoan/SublimeDefault
