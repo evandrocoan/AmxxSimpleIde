@@ -19,6 +19,7 @@
 [submodule "Packages/AmxxChannel"]
 	path = Packages/AmxxChannel
 	url = https://github.com/evandrocoan/AmxxChannel
+	dependency = ChannelManager
 [submodule "Packages/Active View Jump Back"]
 	path = Packages/ActiveViewJumpBack
 	url = https://github.com/evandrocoan/SublimeActiveViewJumpBack
