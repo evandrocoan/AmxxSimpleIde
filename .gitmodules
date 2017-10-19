@@ -44,3 +44,6 @@
 [submodule "Packages/OverrideUnpackedPackages"]
 	path = Packages/OverrideUnpackedPackages
 	url = https://github.com/evandrocoan/SublimeUnpackedPackagesOverride
+[submodule "Packages/OverwriteCommitCompletion"]
+	path = Packages/OverwriteCommitCompletion
+	url = https://github.com/evandrocoan/SublimeOverwriteCommitCompletion
