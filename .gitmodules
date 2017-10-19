@@ -41,3 +41,6 @@
 [submodule "Packages/Default"]
 	path = Packages/Default
 	url = https://github.com/evandrocoan/SublimeDefault
+[submodule "Packages/OverrideUnpackedPackages"]
+	path = Packages/OverrideUnpackedPackages
+	url = https://github.com/evandrocoan/SublimeUnpackedPackagesOverride
