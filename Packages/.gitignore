@@ -22,30 +22,30 @@ MoveText
 Notepad++ Color Scheme'
 PackagesManager
 PowerCursors
-PythonDebugTools
 Side-by-Side Settings'
 User
 
 
 
 # Packages dependencies
-coverage/*
-Pyyaml/*
-pyyaml/*
-Pyv8/*
-python-markdown/*
-python-jinja2/*
-pygments/*
-mdpopups/*
-markupsafe/*
-bz2/*
-backrefs/*
-ssl-linux/*
-zzz A File Icon zzz/*
-ChannelManager/*
+coverage
+Pyyaml
+pyyaml
+Pyv8
+PythonDebugTools
+python-markdown
+python-jinja2
+pygments
+mdpopups
+markupsafe
+bz2
+backrefs
+ssl-linux
+zzz A File Icon zzz
+ChannelManager
 
-regex/*
-package_setting_context/*
+regex
+package_setting_context
 
 */linux32-p3/*
 **/linux32-p3/**
