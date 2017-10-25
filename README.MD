@@ -1,4 +1,4 @@
-# Sublime Text Minimal Installation
+# Amxx Simple IDE (Amx Mod X)
 
 An a simple IDE to program/compile AMXX plugins (with Sublime Text) set of settings/packages/shortcuts
 for Sublime Text 3. Currently it is optimized to program on Pawn,
