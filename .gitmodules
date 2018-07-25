@@ -1,18 +1,6 @@
-[submodule "Side-by-Side Settings"]
-	path = Packages/SideBySideSettings
-	url = https://github.com/evandrocoan/SideBySideSettings
-	upstream = https://github.com/jgbishop/sxs-settings
-[submodule "PowerCursors"]
-	path = Packages/PowerCursors
-	url = https://github.com/evandrocoan/PowerCursors
-	upstream = https://github.com/MaokaiLin/PowerCursors
 [submodule "AmxxPawn"]
 	path = Packages/AmxxPawn
 	url = https://github.com/evandrocoan/AmxxPawn
-[submodule "Packages/PackagesManager"]
-	path = Packages/PackagesManager
-	url = https://github.com/evandrocoan/PackagesManager
-	upstream = https://github.com/wbond/package_control
 [submodule "Packages/Clear Cursors Carets"]
 	path = Packages/ClearCursorsCarets
 	url = https://github.com/evandrocoan/ClearCursorsCarets
@@ -28,17 +16,9 @@
 [submodule "Packages/DefaultSyntax"]
 	path = Packages/DefaultSyntax
 	url = https://github.com/evandrocoan/DefaultSyntax
-[submodule "Packages/MoveText"]
-	path = Packages/MoveText
-	url = https://github.com/evandrocoan/MoveText
-	upstream = https://github.com/colinta/SublimeMoveText
 [submodule "Packages/Notepad++ Color Scheme"]
 	path = Packages/Notepad++ Color Scheme
 	url = https://github.com/evandrocoan/NotepadPlusPlusColorScheme
-[submodule "Packages/Default"]
-	path = Packages/Default
-	url = https://github.com/evandrocoan/Default
-	upstream = https://github.com/evandrocoan/DefaultSublimePackage
 [submodule "Packages/OverrideUnpackedPackages"]
 	path = Packages/OverrideUnpackedPackages
 	url = https://github.com/evandrocoan/OverrideUnpackedPackages
@@ -57,10 +37,30 @@
 [submodule "Packages/ChannelManager"]
 	path = Packages/ChannelManager
 	url = https://github.com/evandrocoan/ChannelManager
+[submodule "Packages/0_settings_loader"]
+	path = Packages/0_settings_loader
+	url = https://github.com/evandrocoan/0_settings_loader
+[submodule "Side-by-Side Settings"]
+	path = Packages/SideBySideSettings
+	url = https://github.com/evandrocoan/SideBySideSettings
+	upstream = https://github.com/jgbishop/sxs-settings
+[submodule "PowerCursors"]
+	path = Packages/PowerCursors
+	url = https://github.com/evandrocoan/PowerCursors
+	upstream = https://github.com/MaokaiLin/PowerCursors
+[submodule "Packages/PackagesManager"]
+	path = Packages/PackagesManager
+	url = https://github.com/evandrocoan/PackagesManager
+	upstream = https://github.com/wbond/package_control
+[submodule "Packages/MoveText"]
+	path = Packages/MoveText
+	url = https://github.com/evandrocoan/MoveText
+	upstream = https://github.com/colinta/SublimeMoveText
+[submodule "Packages/Default"]
+	path = Packages/Default
+	url = https://github.com/evandrocoan/Default
+	upstream = https://github.com/evandrocoan/DefaultSublimePackage
 [submodule "Packages/BBCode"]
 	path = Packages/BBCode
 	url = https://github.com/evandrocoan/BBCode
 	upstream = https://github.com/chipotle/BBCode
-[submodule "Packages/0_settings_loader"]
-	path = Packages/0_settings_loader
-	url = https://github.com/evandrocoan/0_settings_loader
