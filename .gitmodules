@@ -7,9 +7,6 @@
 [submodule "AmxxPawn"]
 	path = Packages/AmxxPawn
 	url = https://github.com/evandrocoan/SublimeAmxxPawn
-[submodule "amxmodx"]
-	path = Packages/amxmodx
-	url = https://github.com/evandrocoan/SublimeAMXX_Editor
 [submodule "Packages/PackagesManager"]
 	path = Packages/PackagesManager
 	url = https://github.com/evandrocoan/package_control
@@ -47,3 +44,18 @@
 [submodule "Packages/OverwriteCommitCompletion"]
 	path = Packages/OverwriteCommitCompletion
 	url = https://github.com/evandrocoan/SublimeOverwriteCommitCompletion
+[submodule "Packages/AmxxEditor"]
+	path = Packages/AmxxEditor
+	url = https://github.com/evandrocoan/AmxxEditor
+[submodule "Packages/ConcurrentLogHandler"]
+	path = Packages/ConcurrentLogHandler
+	url = https://github.com/evandroforks/ConcurrentLogHandler
+[submodule "Packages/DebugTools"]
+	path = Packages/DebugTools
+	url = https://github.com/evandrocoan/DebugTools
+[submodule "Packages/EstimatedTimeLeft"]
+	path = Packages/EstimatedTimeLeft
+	url = https://github.com/evandrocoan/EstimatedTimeLeft
+[submodule "Packages/ChannelManager"]
+	path = Packages/ChannelManager
+	url = https://github.com/evandrocoan/ChannelManager

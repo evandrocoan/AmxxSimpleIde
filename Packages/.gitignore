@@ -32,7 +32,6 @@ coverage
 Pyyaml
 pyyaml
 Pyv8
-PythonDebugTools
 python-markdown
 python-jinja2
 pygments
@@ -42,7 +41,6 @@ bz2
 backrefs
 ssl-linux
 zzz A File Icon zzz
-ChannelManager
 
 regex
 package_setting_context
