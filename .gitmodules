@@ -1,15 +1,18 @@
 [submodule "Side-by-Side Settings"]
 	path = Packages/SideBySideSettings
-	url = https://github.com/evandrocoan/sxs-settings
+	url = https://github.com/evandrocoan/SideBySideSettings
+	upstream = https://github.com/jgbishop/sxs-settings
 [submodule "PowerCursors"]
 	path = Packages/PowerCursors
 	url = https://github.com/evandrocoan/PowerCursors
+	upstream = https://github.com/MaokaiLin/PowerCursors
 [submodule "AmxxPawn"]
 	path = Packages/AmxxPawn
-	url = https://github.com/evandrocoan/SublimeAmxxPawn
+	url = https://github.com/evandrocoan/AmxxPawn
 [submodule "Packages/PackagesManager"]
 	path = Packages/PackagesManager
-	url = https://github.com/evandrocoan/package_control
+	url = https://github.com/evandrocoan/PackagesManager
+	upstream = https://github.com/wbond/package_control
 [submodule "Packages/Clear Cursors Carets"]
 	path = Packages/ClearCursorsCarets
 	url = https://github.com/evandrocoan/ClearCursorsCarets
@@ -18,28 +21,30 @@
 	url = https://github.com/evandrocoan/AmxxChannel
 [submodule "Packages/Active View Jump Back"]
 	path = Packages/ActiveViewJumpBack
-	url = https://github.com/evandrocoan/SublimeActiveViewJumpBack
+	url = https://github.com/evandrocoan/ActiveViewJumpBack
 [submodule "Packages/Fix Project Switch Restart Bug"]
 	path = Packages/FixProjectSwitchRestartBug
-	url = https://github.com/evandrocoan/SublimeFixProjectSwitchRestartBug
+	url = https://github.com/evandrocoan/FixProjectSwitchRestartBug
 [submodule "Packages/DefaultSyntax"]
 	path = Packages/DefaultSyntax
-	url = https://github.com/evandrocoan/SublimeDefaultSyntax
+	url = https://github.com/evandrocoan/DefaultSyntax
 [submodule "Packages/MoveText"]
 	path = Packages/MoveText
-	url = https://github.com/evandrocoan/SublimeMoveText
+	url = https://github.com/evandrocoan/MoveText
+	upstream = https://github.com/colinta/SublimeMoveText
 [submodule "Packages/Notepad++ Color Scheme"]
 	path = Packages/Notepad++ Color Scheme
-	url = https://github.com/evandrocoan/SublimeNotepadPlusPlusTheme
+	url = https://github.com/evandrocoan/NotepadPlusPlusColorScheme
 [submodule "Packages/Default"]
 	path = Packages/Default
-	url = https://github.com/evandrocoan/SublimeDefault
+	url = https://github.com/evandrocoan/Default
+	upstream = https://github.com/evandrocoan/DefaultSublimePackage
 [submodule "Packages/OverrideUnpackedPackages"]
 	path = Packages/OverrideUnpackedPackages
-	url = https://github.com/evandrocoan/SublimeUnpackedPackagesOverride
+	url = https://github.com/evandrocoan/OverrideUnpackedPackages
 [submodule "Packages/OverwriteCommitCompletion"]
 	path = Packages/OverrideCommitCompletion
-	url = https://github.com/evandrocoan/SublimeOverwriteCommitCompletion
+	url = https://github.com/evandrocoan/OverrideCommitCompletion
 [submodule "Packages/AmxxEditor"]
 	path = Packages/AmxxEditor
 	url = https://github.com/evandrocoan/AmxxEditor
@@ -55,6 +60,7 @@
 [submodule "Packages/BBCode"]
 	path = Packages/BBCode
 	url = https://github.com/evandrocoan/BBCode
+	upstream = https://github.com/chipotle/BBCode
 [submodule "Packages/0_settings_loader"]
 	path = Packages/0_settings_loader
 	url = https://github.com/evandrocoan/0_settings_loader
