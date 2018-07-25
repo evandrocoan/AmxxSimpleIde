@@ -56,3 +56,9 @@
 [submodule "Packages/ChannelManager"]
 	path = Packages/ChannelManager
 	url = https://github.com/evandrocoan/ChannelManager
+[submodule "Packages/BBCode"]
+	path = Packages/BBCode
+	url = https://github.com/evandrocoan/BBCode
+[submodule "Packages/0_settings_loader"]
+	path = Packages/0_settings_loader
+	url = https://github.com/evandrocoan/0_settings_loader
