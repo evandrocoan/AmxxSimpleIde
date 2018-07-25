@@ -1,5 +1,5 @@
 [submodule "Side-by-Side Settings"]
-	path = Packages/Side-by-Side Settings
+	path = Packages/SideBySideSettings
 	url = https://github.com/evandrocoan/sxs-settings
 [submodule "PowerCursors"]
 	path = Packages/PowerCursors
@@ -42,7 +42,7 @@
 	path = Packages/OverrideUnpackedPackages
 	url = https://github.com/evandrocoan/SublimeUnpackedPackagesOverride
 [submodule "Packages/OverwriteCommitCompletion"]
-	path = Packages/OverwriteCommitCompletion
+	path = Packages/OverrideCommitCompletion
 	url = https://github.com/evandrocoan/SublimeOverwriteCommitCompletion
 [submodule "Packages/AmxxEditor"]
 	path = Packages/AmxxEditor
