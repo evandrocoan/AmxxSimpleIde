@@ -23,9 +23,6 @@
 [submodule "Packages/Fix Project Switch Restart Bug"]
 	path = Packages/FixProjectSwitchRestartBug
 	url = https://github.com/evandrocoan/SublimeFixProjectSwitchRestartBug
-[submodule "Packages/FixedSelectionsClear"]
-	path = Packages/FixedSelectionsClear
-	url = https://github.com/evandrocoan/SublimeFixedSelectionsClear
 [submodule "Packages/DefaultSyntax"]
 	path = Packages/DefaultSyntax
 	url = https://github.com/evandrocoan/SublimeDefaultSyntax
