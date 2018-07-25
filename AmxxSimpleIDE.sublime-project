@@ -12,6 +12,7 @@
                 ".vscode/*",
                 "StudioChannel/*",
                 "Default.sublime-package/*",
+                "Local/Backstroke.gitmodules",
                 "Packages/*",
                 "Utilities/*",
                 ".gitatributtes",
@@ -25,19 +26,21 @@
             ],
             "folder_exclude_patterns":
             [
+                "Data/.sublime",
                 "Data/Cache",
                 "Data/Index",
                 "Data/Lib",
                 "Data/Settings",
-                "Data/Local",
                 "Data/Backup",
                 "Data/Installed Packages",
                 "Data/Packages/ObjectBeautifier",
                 "Data/Packages/User/Color Highlighter",
                 "Data/Packages/User/Package Control.cache",
+                "Data/Packages/User/PackagesManager.cache",
             ],
             "file_exclude_patterns":
             [
+                ".vscode/tags",
                 "Packages/User/FileHistory*.json",
             ],
         },
