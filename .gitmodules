@@ -64,3 +64,6 @@
 	path = Packages/BBCode
 	url = https://github.com/evandrocoan/BBCode
 	upstream = https://github.com/chipotle/BBCode
+[submodule "Packages/ForceRewriteSublimeSettings"]
+	path = Packages/ForceRewriteSublimeSettings
+	url = https://github.com/evandrocoan/ForceRewriteSublimeSettings
