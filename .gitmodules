@@ -55,8 +55,8 @@
 	upstream = https://github.com/colinta/SublimeMoveText
 [submodule "Packages/Default"]
 	path = Packages/Default
-	url = https://github.com/evandrocoan/Default
-	upstream = https://github.com/evandrocoan/DefaultSublimePackage
+	url = https://github.com/evandrocoan/SublimePackageDefault
+	upstream = https://github.com/evandroforks/DefaultSublimePackage
 [submodule "Packages/BBCode"]
 	path = Packages/BBCode
 	url = https://github.com/evandrocoan/BBCode
