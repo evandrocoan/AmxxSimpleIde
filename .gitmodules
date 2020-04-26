@@ -45,6 +45,12 @@
 [submodule "Packages/ForceRewriteSublimeSettings"]
 	path = Packages/ForceRewriteSublimeSettings
 	url = https://github.com/evandrocoan/ForceRewriteSublimeSettings
+[submodule "Packages/FixedToggleFindPanel"]
+	path = Packages/FixedToggleFindPanel
+	url = https://github.com/evandrocoan/FixedToggleFindPanel
+[submodule "Packages/RememberCommandPaletteInput"]
+	path = Packages/RememberCommandPaletteInput
+	url = https://github.com/evandrocoan/RememberCommandPaletteInput
 [submodule "Side-by-Side Settings"]
 	path = Packages/SideBySideSettings
 	url = https://github.com/evandrocoan/SideBySideSettings
@@ -80,9 +86,3 @@
 	url = https://github.com/evandroforks/BetterFindBuffer
 	upstream = https://github.com/aziz/BetterFindBuffer
 	branches = master->master,
-[submodule "Packages/FixedToggleFindPanel"]
-	path = Packages/FixedToggleFindPanel
-	url = https://github.com/evandrocoan/FixedToggleFindPanel
-[submodule "Packages/RememberCommandPaletteInput"]
-	path = Packages/RememberCommandPaletteInput
-	url = https://github.com/evandrocoan/RememberCommandPaletteInput
