@@ -39,9 +39,6 @@
 [submodule "Packages/DebugTools"]
 	path = Packages/DebugTools
 	url = https://github.com/evandrocoan/DebugTools
-[submodule "Packages/EstimatedTimeLeft"]
-	path = Packages/EstimatedTimeLeft
-	url = https://github.com/evandrocoan/EstimatedTimeLeft
 [submodule "Packages/ChannelManager"]
 	path = Packages/ChannelManager
 	url = https://github.com/evandrocoan/ChannelManager
