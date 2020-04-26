@@ -1,35 +1,44 @@
-
-
-
 # Ignore Everything
 # *
 # **
 
-
-
-# Ignore other custom packages
-
-
-
 # Packages dependencies
-coverage
-Pyyaml
-pyyaml
-Pyv8
-python-markdown
-python-jinja2
-pygments
-mdpopups
-markupsafe
-bz2
-backrefs
-ssl-linux
-zzz A File Icon zzz
+jsonschema/*
+coverage/*
+Pyyaml/*
+pyyaml/*
+Pyv8/*
+numpy/*
+python-markdown/*
+python-jinja2/*
+pygments/*
+mdpopups/*
+markupsafe/*
+bz2/*
+backrefs/*
+ssl-linux/*
+ZzzReloadDefaultPackage
+zzz A File Icon zzz/*
 
-regex
-package_setting_context
+pywinpty/**
+wcwidth/**
+pyte/**
+pymdownx/*
+regex/*
+package_setting_context/*
+ruamel-yaml/*
+yaml_macros_engine/*
+pathlib/*
+ptyprocess/*
 
 */linux32-p3/*
 **/linux32-p3/**
 
-
+# Ignore other custom packages
+.gitignore
+.travis.yml
+zz_packagesmanager_reenabler.py
+tests.py
+tests.sublime-commands
+ObjectBeautifier
+Text

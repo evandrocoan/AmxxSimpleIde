@@ -1,5 +1,10 @@
-/sublime_text.exe.lnk
+# Start ignoring things
+*.merged-ca-bundle
 *.sublime-workspace
+
+/Simple IDE Packages.lnk
+/Sublime Text Builds.lnk
+/ObjectBeautifier
 
 /.sublime/
 /Backup/
@@ -9,4 +14,12 @@
 /Local/
 /Settings/
 /Installed Packages/
-/Default.sublime-package/
+
+
+#
+# Files and folders from the sublimehq/Packages
+#
+/Packages/.git/
+/Packages/.github/
+/Packages/LICENSE
+/Packages/README.md
