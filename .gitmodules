@@ -70,3 +70,8 @@
 	url = https://github.com/evandrocoan/BBCode
 	upstream = https://github.com/chipotle/BBCode
 	branches = master->master,
+[submodule "Packages/AltUp"]
+	path = Packages/AltUp
+	url = https://github.com/evandroforks/AltUp
+	upstream = https://github.com/germtb/AltUp
+	branches = master->master,
