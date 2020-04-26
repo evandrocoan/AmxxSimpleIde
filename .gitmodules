@@ -37,9 +37,6 @@
 [submodule "Packages/ChannelManager"]
 	path = Packages/ChannelManager
 	url = https://github.com/evandrocoan/ChannelManager
-[submodule "Packages/0_settings_loader"]
-	path = Packages/0_settings_loader
-	url = https://github.com/evandrocoan/0_settings_loader
 [submodule "Side-by-Side Settings"]
 	path = Packages/SideBySideSettings
 	url = https://github.com/evandrocoan/SideBySideSettings
