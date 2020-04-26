@@ -80,3 +80,6 @@
 	url = https://github.com/evandroforks/BetterFindBuffer
 	upstream = https://github.com/aziz/BetterFindBuffer
 	branches = master->master,
+[submodule "Packages/FixedToggleFindPanel"]
+	path = Packages/FixedToggleFindPanel
+	url = https://github.com/evandrocoan/FixedToggleFindPanel
