@@ -75,3 +75,8 @@
 	url = https://github.com/evandroforks/AltUp
 	upstream = https://github.com/germtb/AltUp
 	branches = master->master,
+[submodule "Packages/BetterFindBuffer"]
+	path = Packages/BetterFindBuffer
+	url = https://github.com/evandroforks/BetterFindBuffer
+	upstream = https://github.com/aziz/BetterFindBuffer
+	branches = master->master,
