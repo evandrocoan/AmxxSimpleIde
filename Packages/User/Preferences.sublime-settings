@@ -1,7 +1,11 @@
 {
-	"font_options":
+	"font_size": 14.5,
+    "font_options":
+    [
+        "gdi"
+    ],
+	"ignored_packages":
 	[
-		"gdi"
-	],
-	"font_size": 14.5
+		"Vintage"
+	]
 }
