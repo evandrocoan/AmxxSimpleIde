@@ -83,3 +83,6 @@
 [submodule "Packages/FixedToggleFindPanel"]
 	path = Packages/FixedToggleFindPanel
 	url = https://github.com/evandrocoan/FixedToggleFindPanel
+[submodule "Packages/RememberCommandPaletteInput"]
+	path = Packages/RememberCommandPaletteInput
+	url = https://github.com/evandrocoan/RememberCommandPaletteInput
