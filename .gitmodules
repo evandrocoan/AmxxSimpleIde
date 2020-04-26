@@ -1,3 +1,11 @@
+[submodule "Default.sublime-package"]
+	path = Default.sublime-package
+	url = https://github.com/evandroforks/SublimePackageDefault
+[submodule "Packages/Default"]
+	path = Packages/Default
+	url = https://github.com/evandrocoan/SublimePackageDefault
+	upstream = https://github.com/evandroforks/SublimePackageDefault
+	branches = master->master,
 [submodule "AmxxPawn"]
 	path = Packages/AmxxPawn
 	url = https://github.com/evandrocoan/AmxxPawn
@@ -37,30 +45,31 @@
 [submodule "Packages/ChannelManager"]
 	path = Packages/ChannelManager
 	url = https://github.com/evandrocoan/ChannelManager
+[submodule "Packages/ForceRewriteSublimeSettings"]
+	path = Packages/ForceRewriteSublimeSettings
+	url = https://github.com/evandrocoan/ForceRewriteSublimeSettings
 [submodule "Side-by-Side Settings"]
 	path = Packages/SideBySideSettings
 	url = https://github.com/evandrocoan/SideBySideSettings
 	upstream = https://github.com/jgbishop/sxs-settings
+	branches = master->master,
 [submodule "PowerCursors"]
 	path = Packages/PowerCursors
 	url = https://github.com/evandrocoan/PowerCursors
 	upstream = https://github.com/MaokaiLin/PowerCursors
+	branches = master->master,
 [submodule "Packages/PackagesManager"]
 	path = Packages/PackagesManager
 	url = https://github.com/evandrocoan/PackagesManager
 	upstream = https://github.com/wbond/package_control
+	branches = master->master,
 [submodule "Packages/MoveText"]
 	path = Packages/MoveText
 	url = https://github.com/evandrocoan/MoveText
 	upstream = https://github.com/colinta/SublimeMoveText
-[submodule "Packages/Default"]
-	path = Packages/Default
-	url = https://github.com/evandrocoan/SublimePackageDefault
-	upstream = https://github.com/evandroforks/DefaultSublimePackage
+	branches = master->master,
 [submodule "Packages/BBCode"]
 	path = Packages/BBCode
 	url = https://github.com/evandrocoan/BBCode
 	upstream = https://github.com/chipotle/BBCode
-[submodule "Packages/ForceRewriteSublimeSettings"]
-	path = Packages/ForceRewriteSublimeSettings
-	url = https://github.com/evandrocoan/ForceRewriteSublimeSettings
+	branches = master->master,
